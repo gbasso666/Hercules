@@ -127,7 +127,7 @@ in_moc_16,19,33,1	script	Guildsman#asn	1_M_JOBTESTER,{
 		mes "You've been approved!";
 		next;
 		completequest 8008;
-		callfunc "Job_Change",Job_Assassin;
+		callfunc "Job_Change",Job_Assassin_Cross;
 		callfunc "F_ClearJobVar";		// clears all job variables for the current player
 		mes "[Assassin Expert 'Huey']";
 		mes "Now! Do your best to be a great Assassin! Travel with faith and kill with dignity. Come by anytime and pay us a visit. Once again, congratulations.";

@@ -33,7 +33,7 @@
 * Changing this limit requires edits to refine_db.conf
 **/
 #ifdef RENEWAL
-	#define MAX_REFINE 20
+	#define MAX_REFINE 10
 #else
 	#define MAX_REFINE 10
 #endif

@@ -191,3 +191,6 @@ gef_fild11,283,100,4,1	monster	Black Mushroom	1084,3,360000,180000,1
 //== gef_fild13 - No Spawns on Renewal =====================
 
 //== gef_fild14 - Disabled on Renewal ======================
+gef_fild14,0,0,0,0	boss_monster	Orc Hero	1087,1,3600000,600000,1
+gef_fild14,0,0,0,0	monster	Orc Archer	1189,30,0,0,0
+gef_fild14,0,0,0,0	monster	High Orc	1213,120,0,0,0

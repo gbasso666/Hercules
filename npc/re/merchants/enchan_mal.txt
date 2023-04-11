@@ -431,163 +431,84 @@ L_Socket:
 		}
 		switch(.@enchant_type) {
 		case 10: //Egrade_Coin
-			.@i = rand(1,531);
-			     if (.@i < 101) .@enchant = 4787; //Mdef4
-			else if (.@i < 201) .@enchant = 4792; //Def6
-			else if (.@i < 301) .@enchant = 4801; //SP100
-			else if (.@i < 351) .@enchant = 4795; //HP100
-			else if (.@i < 401) .@enchant = 4796; //HP200
-			else if (.@i < 451) .@enchant = 4819; //Atk1
-			else if (.@i < 476) .@enchant = 4720; //Dexterity1
-			else if (.@i < 501) .@enchant = 4740; //Vitality1
-			else if (.@i < 526) .@enchant = 4750; //Luck1
-			else if (.@i < 528) .@enchant = 4700; //Strength1
-			else if (.@i < 530) .@enchant = 4730; //Agility1
-			else if (.@i < 532) .@enchant = 4710; //Inteligence1
+			.@i = rand(1,9);
+			     if (.@i == 1) .@enchant = 4801; //SP100
+			else if (.@i == 2) .@enchant = 4796; //HP200
+			else if (.@i == 3) .@enchant = 4819; //Atk1
+			else if (.@i == 4) .@enchant = 4720; //Dexterity1
+			else if (.@i == 5) .@enchant = 4740; //Vitality1
+			else if (.@i == 6) .@enchant = 4750; //Luck1
+			else if (.@i == 7) .@enchant = 4700; //Strength1
+			else if (.@i == 8) .@enchant = 4730; //Agility1
+			else if (.@i == 9) .@enchant = 4710; //Inteligence1
 			else .@enchant = 9;
 			break;
 		case 9: //Dgrade_Coin
-			.@i = rand(1,531);
-			     if (.@i < 101) .@enchant = 4795; //HP100
-			else if (.@i < 201) .@enchant = 4796; //HP200
-			else if (.@i < 301) .@enchant = 4819; //Atk1
-			else if (.@i < 351) .@enchant = 4720; //Dexterity1
-			else if (.@i < 401) .@enchant = 4740; //Vitality1
-			else if (.@i < 451) .@enchant = 4750; //Luck1
-			else if (.@i < 476) .@enchant = 4700; //Strength1
-			else if (.@i < 501) .@enchant = 4730; //Agility1
-			else if (.@i < 526) .@enchant = 4710; //Inteligence1
-			else if (.@i < 528) .@enchant = 4701; //Strength2
-			else if (.@i < 530) .@enchant = 4731; //Agility2
-			else if (.@i < 532) .@enchant = 4711; //Inteligence2
+			.@i = rand(1,4);
+			     if (.@i == 1) .@enchant = 4796; //HP200
+			else if (.@i == 2) .@enchant = 4701; //Strength2
+			else if (.@i == 3) .@enchant = 4731; //Agility2
+			else if (.@i == 4) .@enchant = 4711; //Inteligence2
 			else .@enchant = 9;
 			break;
 		case 8: //Cgrade_Coin
-			.@i = rand(1,531);
-			     if (.@i < 101) .@enchant = 4720; //Dexterity1
-			else if (.@i < 201) .@enchant = 4740; //Vitality1
-			else if (.@i < 301) .@enchant = 4750; //Luck1
-			else if (.@i < 351) .@enchant = 4700; //Strength1
-			else if (.@i < 401) .@enchant = 4730; //Agility1
-			else if (.@i < 451) .@enchant = 4710; //Inteligence1
-			else if (.@i < 476) .@enchant = 4701; //Strength2
-			else if (.@i < 501) .@enchant = 4731; //Agility2
-			else if (.@i < 526) .@enchant = 4711; //Inteligence2
-			else if (.@i < 528) .@enchant = 4702; //Strength3
-			else if (.@i < 530) .@enchant = 4732; //Agility3
-			else if (.@i < 532) .@enchant = 4712; //Inteligence3
+			.@i = rand(1,3);
+				 if (.@i == 1) .@enchant = 4702; //Strength3
+			else if (.@i == 2) .@enchant = 4732; //Agility3
+			else if (.@i == 3) .@enchant = 4712; //Inteligence3
 			else .@enchant = 9;
 			break;
 		case 7: //Bgrade_Coin
-			.@i = rand(1,531);
-			     if (.@i < 101) .@enchant = 4700; //Strength1
-			else if (.@i < 201) .@enchant = 4730; //Agility1
-			else if (.@i < 301) .@enchant = 4710; //Inteligence1
-			else if (.@i < 351) .@enchant = 4701; //Strength2
-			else if (.@i < 401) .@enchant = 4731; //Agility2
-			else if (.@i < 451) .@enchant = 4711; //Inteligence2
-			else if (.@i < 476) .@enchant = 4702; //Strength3
-			else if (.@i < 501) .@enchant = 4732; //Agility3
-			else if (.@i < 526) .@enchant = 4712; //Inteligence3
-			else if (.@i < 528) .@enchant = 4703; //Strength4
-			else if (.@i < 530) .@enchant = 4733; //Agility4
-			else if (.@i < 532) .@enchant = 4713; //Inteligence4
+			.@i = rand(1,3);
+				 if (.@i == 1) .@enchant = 4703; //Strength4
+			else if (.@i == 2) .@enchant = 4733; //Agility4
+			else if (.@i == 3) .@enchant = 4713; //Inteligence4
 			else .@enchant = 9;
 			break;
 		case 6: //Agrade_Coin - Caster
-			.@i = rand(1,555);
-			     if (.@i < 81)  .@enchant = 4711; //Inteligence2
-			else if (.@i < 161) .@enchant = 4721; //Dexterity2
-			else if (.@i < 241) .@enchant = 4814; //Spell2
-			else if (.@i < 311) .@enchant = 4712; //Inteligence3
-			else if (.@i < 371) .@enchant = 4722; //Dexterity3
-			else if (.@i < 431) .@enchant = 4813; //Spell3
-			else if (.@i < 476) .@enchant = 4713; //Inteligence4
-			else if (.@i < 516) .@enchant = 4812; //Spell4
-			else if (.@i < 526) .@enchant = 4760; //Matk1
-			else if (.@i < 546) .@enchant = 4714; //Inteligence5
-			else if (.@i < 551) .@enchant = 4826; //Spell5
-			else if (.@i < 556) .@enchant = 4761; //Matk2
+			.@i = rand(1,3);
+				 if (.@i == 1) .@enchant = 4714; //Inteligence5
+			else if (.@i == 2) .@enchant = 4826; //Spell5
+			else if (.@i == 3) .@enchant = 4761; //Matk2
 			else .@enchant = 9;
 			break;
 		case 5: //Agrade_Coin - Long Range
-			.@i = rand(1,555);
-			     if (.@i < 81)  .@enchant = 4731; //Agility2
-			else if (.@i < 161) .@enchant = 4833; //Expert_Archer2
-			else if (.@i < 241) .@enchant = 4817; //Sharp2
-			else if (.@i < 311) .@enchant = 4732; //Agility3
-			else if (.@i < 371) .@enchant = 4834; //Expert_Archer3
-			else if (.@i < 431) .@enchant = 4816; //Sharp3
-			else if (.@i < 476) .@enchant = 4733; //Agility4
-			else if (.@i < 516) .@enchant = 4835; //Expert_Archer4
-			else if (.@i < 526) .@enchant = 4807; //Atk_Speed1
-			else if (.@i < 546) .@enchant = 4734; //Agility5
-			else if (.@i < 551) .@enchant = 4836; //Expert_Archer5
-			else if (.@i < 556) .@enchant = 4807; //Atk_Speed1
+			.@i = rand(1,4);
+			     if (.@i == 1) .@enchant = 4816; //Sharp3
+			else if (.@i == 2) .@enchant = 4734; //Agility5
+			else if (.@i == 3) .@enchant = 4836; //Expert_Archer5
+			else if (.@i == 4) .@enchant = 4807; //Atk_Speed1
 			else .@enchant = 9;
 			break;
 		case 4: //Agrade_Coin - Short Range
-			.@i = rand(1,555);
-			     if (.@i < 81)  .@enchant = 4731; //Agility2
-			else if (.@i < 161) .@enchant = 4808; //Fighting_Spirit4
-			else if (.@i < 241) .@enchant = 4817; //Sharp2
-			else if (.@i < 311) .@enchant = 4732; //Agility3
-			else if (.@i < 371) .@enchant = 4820; //Fighting_Spirit5
-			else if (.@i < 431) .@enchant = 4816; //Sharp3
-			else if (.@i < 476) .@enchant = 4733; //Agility4
-			else if (.@i < 516) .@enchant = 4821; //Fighting_Spirit6
-			else if (.@i < 526) .@enchant = 4807; //Atk_Speed1
-			else if (.@i < 546) .@enchant = 4734; //Agility5
-			else if (.@i < 551) .@enchant = 4822; //Fighting_Spirit7
-			else if (.@i < 556) .@enchant = 4807; //Atk_Speed1
+			.@i = rand(1,4);
+				 if (.@i == 1) .@enchant = 4816; //Sharp3
+			else if (.@i == 2) .@enchant = 4734; //Agility5
+			else if (.@i == 3) .@enchant = 4822; //Fighting_Spirit7
+			else if (.@i == 4) .@enchant = 4807; //Atk_Speed1
 			else .@enchant = 9;
 			break;
 		case 3: //Anger_Seagod - Caster
-			.@i = rand(1,555);
-			     if (.@i < 81)  .@enchant = 4712; //Inteligence3
-			else if (.@i < 161) .@enchant = 4722; //Dexterity3
-			else if (.@i < 241) .@enchant = 4813; //Spell3
-			else if (.@i < 311) .@enchant = 4713; //Inteligence4
-			else if (.@i < 371) .@enchant = 4812; //Spell4
-			else if (.@i < 431) .@enchant = 4760; //Matk1
-			else if (.@i < 476) .@enchant = 4714; //Inteligence5
-			else if (.@i < 516) .@enchant = 4826; //Spell5
-			else if (.@i < 526) .@enchant = 4761; //Matk2
-			else if (.@i < 546) .@enchant = 4715; //Inteligence6
-			else if (.@i < 551) .@enchant = 4827; //Spell6
-			else if (.@i < 556) .@enchant = 4761; //Matk2
+			.@i = rand(1,3);
+				 if (.@i == 1) .@enchant = 4715; //Inteligence6
+			else if (.@i == 2) .@enchant = 4827; //Spell6
+			else if (.@i == 3) .@enchant = 4761; //Matk2
 			else .@enchant = 9;
 			break;
 		case 2: //Anger_Seagod - Long Range
-			.@i = rand(1,555);
-			     if (.@i < 81)  .@enchant = 4732; //Agility3
-			else if (.@i < 161) .@enchant = 4834; //Expert_Archer3
-			else if (.@i < 241) .@enchant = 4843; //Sharp4
-			else if (.@i < 311) .@enchant = 4733; //Agility4
-			else if (.@i < 371) .@enchant = 4835; //Expert_Archer4
-			else if (.@i < 431) .@enchant = 4844; //Sharp5
-			else if (.@i < 476) .@enchant = 4734; //Agility5
-			else if (.@i < 516) .@enchant = 4836; //Expert_Archer5
-			else if (.@i < 526) .@enchant = 4807; //Atk_Speed1
-			else if (.@i < 546) .@enchant = 4735; //Agility6
-			else if (.@i < 551) .@enchant = 4837; //Expert_Archer6
-			else if (.@i < 556) .@enchant = 4807; //Atk_Speed1
+			.@i = rand(1,4);
+				 if (.@i == 1) .@enchant = 4844; //Sharp5
+			else if (.@i == 2) .@enchant = 4735; //Agility6
+			else if (.@i == 3) .@enchant = 4837; //Expert_Archer6
+			else if (.@i == 4) .@enchant = 4807; //Atk_Speed1
 			else .@enchant = 9;
 			break;
 		case 1: //Anger_Seagod - Short Range
-			.@i = rand(1,555);
-			     if (.@i < 81)  .@enchant = 4732; //Agility3
-			else if (.@i < 161) .@enchant = 4820; //Fighting_Spirit5
-			else if (.@i < 241) .@enchant = 4843; //Sharp4
-			else if (.@i < 311) .@enchant = 4733; //Agility4
-			else if (.@i < 371) .@enchant = 4821; //Fighting_Spirit6
-			else if (.@i < 431) .@enchant = 4844; //Sharp5
-			else if (.@i < 476) .@enchant = 4734; //Agility5
-			else if (.@i < 516) .@enchant = 4822; //Fighting_Spirit7
-			else if (.@i < 526) .@enchant = 4807; //Atk_Speed1
-			else if (.@i < 546) .@enchant = 4735; //Agility6
-			else if (.@i < 551) .@enchant = 4823; //Fighting_Spirit8
-			else if (.@i < 556) .@enchant = 4807; //Atk_Speed1
+			.@i = rand(1,4);
+				 if (.@i == 1) .@enchant = 4844; //Sharp5
+			else if (.@i == 2) .@enchant = 4735; //Agility6
+			else if (.@i == 3) .@enchant = 4823; //Fighting_Spirit8
+			else if (.@i == 4) .@enchant = 4807; //Atk_Speed1
 			else .@enchant = 9;
 			break;
 		default:

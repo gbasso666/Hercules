@@ -1157,7 +1157,7 @@ static int skill_calc_heal(struct block_list *src, struct block_list *target, ui
 			 * Renewal Heal Formula
 			 * Formula: ( [(Base Level + INT) / 5] ? 30 ) ? (Heal Level / 10) ? (Modifiers) + MATK
 			 **/
-			hp = (status->get_lv(src) + status_get_int(src)) / 5 * 30  * skill_lv / 10;
+			hp = (status->get_lv(src) + status_get_int(src)) / 4 * 30  * skill_lv / 10;
 #else // not RENEWAL
 			hp = ( status->get_lv(src) + status_get_int(src) ) / 8 * (4 + ( skill_id == AB_HIGHNESSHEAL ? ( sd ? pc->checkskill(sd,AL_HEAL) : 10 ) : skill_lv ) * 8);
 #endif // RENEWAL

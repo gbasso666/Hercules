@@ -892,7 +892,7 @@ comodo,226,123,5	script	Wandering Bard	2_M_BARD_ORIENT,{
 						break;
 				default:
 					completequest 3003;
-					callfunc "Job_Change",Job_Bard;
+					callfunc "Job_Change",Job_Clown;
 					callfunc "F_ClearJobVar";		//clears all job variables for the current player
 					mes "[Lalo]";
 					mes "Very well! Hope you sing happy enjoyable songs.";

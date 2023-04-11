@@ -170,7 +170,7 @@ yuno_in02,38,61,5	script	Dean of the Academy#sa	2_M_SAGE_OLD,{
 			mes "Ah yes...you seem to be proficient in studying.";
 			next;
 			completequest 2052;
-			callfunc "Job_Change",Job_Sage;
+			callfunc "Job_Change",Job_Professor;
 			callfunc "F_ClearJobVar";
 			mes "[Kayron Grik]";
 			mes "Congratulations! You have now become a Sage.";

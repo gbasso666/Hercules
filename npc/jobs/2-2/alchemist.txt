@@ -1881,7 +1881,7 @@ alde_alche,101,184,4	script	Master Alchemist#am	2_M_DYEINGER,{
 		ALCH_Q = 0;
 		completequest 2040;
 		.@jlevel = JobLevel;
-		callfunc "Job_Change",Job_Alchemist;
+		callfunc "Job_Change",Job_Creator;
 		callfunc "F_ClearJobVar";
 		mes "[Vincent Carsciallo]";
 		mes "Henceforth, you are\r"

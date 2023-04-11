@@ -152,6 +152,8 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 	sellitem Spectacles;
@@ -217,6 +219,8 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 	sellitem Booby_Trap;
@@ -266,6 +270,8 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 	sellitem Booby_Trap;
@@ -402,6 +408,8 @@ OnInit:
 	sellitem White_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 	sellitem Spectacles;
@@ -524,6 +532,8 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 	sellitem Booby_Trap;
@@ -635,6 +645,8 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 	sellitem Booby_Trap;
@@ -697,6 +709,8 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 	sellitem Booby_Trap;
@@ -805,6 +819,8 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 }
@@ -873,6 +889,8 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 }
@@ -1055,6 +1073,7 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Berserk_Potion;
 	sellitem Awakening_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 	sellitem Booby_Trap;
@@ -1084,6 +1103,8 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 	sellitem Booby_Trap;
@@ -1149,6 +1170,8 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 	sellitem Booby_Trap;
@@ -1164,6 +1187,8 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 	sellitem Spectacles;
@@ -1334,6 +1359,8 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 	sellitem Booby_Trap;
@@ -1637,6 +1664,8 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 	sellitem Spectacles;
@@ -1689,6 +1718,8 @@ OnInit:
 	sellitem Wing_Of_Butterfly;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Luxury_Sunglasses;
 }
 
@@ -1707,6 +1738,8 @@ OnInit:
 	sellitem Wing_Of_Butterfly;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Leaf_Of_Yggdrasil;
 }
 
@@ -1767,6 +1800,8 @@ OnInit:
 	sellitem Green_Potion;
 	sellitem Center_Potion;
 	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Blue_Potion;
 	sellitem Wing_Of_Fly;
 	sellitem Wing_Of_Butterfly;
 	sellitem Spectacles;

@@ -90,83 +90,6 @@ gld_dun01,28,85,0	script	Grunburti#1::GodDwarf	4_M_DWARF,{
 		close;
 	case 3:
 		.@GID = getcharid(CHAR_ID_GUILD);
-		if (($God1 < $@god_check2) || ($God2 < $@god_check2) || ($God3 < $@god_check2) || ($God4 < $@god_check2)){
-			if (($God1 >= $@god_check1) && ($God2 >= $@god_check1) && ($God3 >= $@god_check1) && ($God4 >= $@god_check1) && (strcharinfo(PC_NAME) == getguildinfo(GUILDINFO_MASTER_NAME, .@GID))) {
-				mes "[Dwarf Grunburti]";
-				mes "Hmm...";
-				mes "I'll need some things to make a weapon for you. What exactly were you interested in having?";
-				next;
-				switch(select("Brisingamen", "Megingjard", "Sleipnir", "Mjolnir")) {
-				case 1:
-					mes "[Dwarf Grunburti]";
-					mes "I will need...";
-					mes "^0000FF4 Freya's Jewel";
-					mes "4 Silver Ornament";
-					mes "3 Snow Crystal";
-					mes "3 Ripple";
-					mes "3 Drifting Air";
-					mes "2 Sapphire";
-					mes "3 Pearl";
-					mes "10 Opal";
-					mes "5 Cursed Ruby";
-					mes "20 Gold^000000";
-					mes "1 Necklace^000000...";
-					next;
-					mes "[Dwarf Grunburti]";
-					mes "However, the time for me to create this Brisingamen has not yet come. You'll have to wait until the seals are released. Mwahahaha!";
-					close;
-				case 2:
-					mes "[Dwarf Grunburti]";
-					mes "I will need...";
-					mes "^0000FF1 Gleipnir";
-					mes "20 Gold";
-					mes "10 Sapphire";
-					mes "10 Oridecon";
-					mes "1 Belt^000000";
-					next;
-					mes "[Dwarf Grunburti]";
-					mes "However, the seals on Megingjard have not yet been released. Until then, you'll have to wait! Bwahahaha!";
-					close;
-				case 3:
-					mes "[Dwarf Grunburti]";
-					mes "I will need...";
-					mes "^0000FF3 Wheel of the Unknown";
-					mes "5 Feather of Angel Wing";
-					mes "3 Sprit of Fish";
-					mes "4 Amblem of the Sun God";
-					mes "3 Breath of Spirit";
-					mes "20 Gold";
-					mes "10 Elunium";
-					mes "1 Slotted Boots^000000";
-					next;
-					mes "[Dwarf Grunburti]";
-					mes "But even so, I can't create Sleipnir until the seals have been broken. Otherwise, you're out of luck, human. Hahaha~!";
-					close;
-				case 4:
-					mes "[Dwarf Grunburti]";
-					mes "I will need...";
-					mes "^0000FF2 Thor's Gauntlets";
-					mes "4 Iron Maiden";
-					mes "5 Wrath of Valkyrie";
-					mes "5 Omen of Tempest";
-					mes "5 Billow";
-					mes "20 Oridecon";
-					mes "5 Elunium";
-					mes "40 Gold";
-					mes "1 Stunner^000000";
-					next;
-					mes "[Dwarf Grunburti]";
-					mes "But I can't even create a replica of Mjolnir if the seals are still in place. Until they're released, you'll just have to wait. Bwahaha!";
-					close;
-				}
-			}
-			mes "[Dwarf Grunburti]";
-			mes "We Dwarves have too much pride to demonstrate our skills in front of a lowly human!";
-			next;
-			mes "[Dwarf Grunburti]";
-			mes "Stop bothering me and get out of here! Go play with some monsters, you simple minded fool!";
-			close;
-		}
 		if (strcharinfo(PC_NAME) != getguildinfo(GUILDINFO_MASTER_NAME, .@GID)) {
 			mes "[Dwarf Grunburti]";
 			mes "I'll only present";
@@ -225,17 +148,6 @@ gld_dun01,28,85,0	script	Grunburti#1::GodDwarf	4_M_DWARF,{
 			mes "[Dwarf Grunburti]";
 			mes "...";
 			mes "......";
-			next;
-			mes "[Dwarf Grunburti]";
-			mes "...";
-			mes "......";
-			mes ".........";
-			next;
-			mes "[Dwarf Grunburti]";
-			mes "...";
-			mes "......";
-			mes ".........";
-			mes ".............";
 			next;
 			mes "[Dwarf Grunburti]";
 			mes "How dare you come here unprepared?! Did you forget what you needed to bring? Listen carefully this time!";
@@ -396,22 +308,6 @@ que_god01,215,128,0	duplicate(GodEntrance)	 #que_godnpc2	HIDDEN_NPC
 que_god01,213,128,0	duplicate(GodEntrance)	 #que_godnpc3	HIDDEN_NPC
 
 que_god01,154,112,4	script	Grunburti#god	4_M_DWARF,{
-	if (($God1 < $@god_check2) || ($God2 < $@god_check2) || ($God3 < $@god_check2) || ($God4 < $@god_check2)){
-		mes "[Dwarf Grunburti]";
-		mes "One of the godly";
-		mes "items has been created,";
-		mes "and the seals have been";
-		mes "restored. You'll have to";
-		mes "wait until they're all";
-		mes "released again...!";
-		next;
-		mes "[Dwarf Grunburti]";
-		mes "Bwahahahahahahaa!";
-		mes "Even though you're";
-		mes "just a human, I feel";
-		mes "pity for you~";
-		close;
-	}
 	.@GID = getcharid(CHAR_ID_GUILD);
 	if (strcharinfo(PC_NAME) != getguildinfo(GUILDINFO_MASTER_NAME, .@GID)) {
 		mes "[Dwarf Grunburti]";
@@ -483,22 +379,6 @@ que_god01,154,112,4	script	Grunburti#god	4_M_DWARF,{
 				mes "Never in my wildest";
 				mes "imaginings have I thought that I'd be crafting this masterpiece for a mere human. Give me a moment.";
 				next;
-				if (($God1 < $@god_check2) || ($God2 < $@god_check2) || ($God3 < $@god_check2) || ($God4 < $@god_check2)){
-					mes "[Dwarf Grunburti]";
-					mes "But...";
-					mes "The seals";
-					mes "have just been";
-					mes "restored. You'll have to";
-					mes "wait until they're all";
-					mes "released again...!";
-					next;
-					mes "[Dwarf Grunburti]";
-					mes "Bwahahahahahahaa!";
-					mes "Even though you're";
-					mes "just a human, I feel";
-					mes "pity for you~";
-					close;
-				}
 				delitem Jewel_Of_Prayer,4;
 				delitem Silver_Fancy,4;
 				delitem Crystal_Of_Snow,3;
@@ -563,22 +443,6 @@ que_god01,154,112,4	script	Grunburti#god	4_M_DWARF,{
 				mes "I'd never believe that";
 				mes "something so powerful and dangerous as Megingjard would end up in the hands of a human...";
 				next;
-				if (($God1 < $@god_check2) || ($God2 < $@god_check2) || ($God3 < $@god_check2) || ($God4 < $@god_check2)){
-					mes "[Dwarf Grunburti]";
-					mes "But...";
-					mes "The seals";
-					mes "have just been";
-					mes "restored. You'll have to";
-					mes "wait until they're all";
-					mes "released again...!";
-					next;
-					mes "[Dwarf Grunburti]";
-					mes "Bwahahahahahahaa!";
-					mes "Even though you're";
-					mes "just a human, I feel";
-					mes "pity for you~";
-					close;
-				}
 				delitem Gullraifnir,1;
 				delitem Gold,20;
 				delitem Blue_Jewel,10;
@@ -650,22 +514,6 @@ que_god01,154,112,4	script	Grunburti#god	4_M_DWARF,{
 				mes "used by a human.";
 				mes "Give me a moment...";
 				next;
-				if (($God1 < $@god_check2) || ($God2 < $@god_check2) || ($God3 < $@god_check2) || ($God4 < $@god_check2)){
-					mes "[Dwarf Grunburti]";
-					mes "But...";
-					mes "The seals";
-					mes "have just been";
-					mes "restored. You'll have to";
-					mes "wait until they're all";
-					mes "released again...!";
-					next;
-					mes "[Dwarf Grunburti]";
-					mes "Bwahahahahahahaa!";
-					mes "Even though you're";
-					mes "just a human, I feel";
-					mes "pity for you~";
-					close;
-				}
 				delitem Mystery_Wheel,3;
 				delitem Feather_Of_Angel,5;
 				delitem Soul_Of_Fish,3;
@@ -738,22 +586,6 @@ que_god01,154,112,4	script	Grunburti#god	4_M_DWARF,{
 				mes "or you will regret it.";
 				mes "Mark my words...";
 				next;
-				if (($God1 < $@god_check2) || ($God2 < $@god_check2) || ($God3 < $@god_check2) || ($God4 < $@god_check2)){
-					mes "[Dwarf Grunburti]";
-					mes "But...";
-					mes "The seals";
-					mes "have just been";
-					mes "restored. You'll have to";
-					mes "wait until they're all";
-					mes "released again...!";
-					next;
-					mes "[Dwarf Grunburti]";
-					mes "Bwahahahahahahaa!";
-					mes "Even though you're";
-					mes "just a human, I feel";
-					mes "pity for you~";
-					close;
-				}
 				delitem Iron_Glove,2;
 				delitem Iron_Maiden,4;
 				delitem Anger_Of_Valkurye,5;

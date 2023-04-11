@@ -426,7 +426,7 @@ prt_in,88,101,4	script	Chivalry Captain#knt	1_M_KNIGHTMASTER,{
 		mes "a Knight.";
 		next;
 		completequest 9012;
-		callfunc "Job_Change",Job_Knight;
+		callfunc "Job_Change",Job_Lord_Knight;
 		callfunc "F_ClearJobVar"; // Clears all job variables for the current player
 		mes "[Captain Herman]";
 		mes "I hereby declare";

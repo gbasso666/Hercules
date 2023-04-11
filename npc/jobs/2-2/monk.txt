@@ -866,7 +866,7 @@ monk_in,99,58,1	script	Sensei Moohae#mk	1_M_PASTOR,{
 			next;
 			.@jlevel = JobLevel;
 			completequest 3032;
-			callfunc "Job_Change",Job_Monk;
+			callfunc "Job_Change",Job_Champion;
 			callfunc "F_ClearJobVar";
 			mes "[Sensei Moohae]";
 			mes "....You are a monk.";

@@ -433,7 +433,7 @@ gef_tower,111,37,4	script	Wizard Guildsman	1_F_GYPSY,{
 		mes "Well, no need to wait, I congratulate you. I hearby deem you Wizard.";
 		next;
 		completequest 9018;
-		callfunc "Job_Change",Job_Wizard;
+		callfunc "Job_Change",Job_High_Wizard;
 		callfunc "F_ClearJobVar";		// clears all job variables for the current player
 		mes "[Catherine]";
 		mes "Since you're a Wizard now, act like a Wizard, got it?";
