@@ -1913,6 +1913,12 @@ static int status_calc_pc_(struct map_session_data *sd, enum e_status_calc_opt o
 
 	if ((pc->checkskill(sd,SU_SPRITEMABLE)) > 0)
 		bstatus->max_hp += 1000;
+	
+	// Apply modifiers from activated skills?
+#ifdef RENEWAL
+	if (sc->data[SC_ANGELUS])
+		bstatus->max_hp += sc->data[SC_ANGELUS]->val2 * 10;
+#endif
 
 	// Apply relative modifiers from equipment
 	if(sd->hprate < 0)
@@ -1926,7 +1932,7 @@ static int status_calc_pc_(struct map_session_data *sd, enum e_status_calc_opt o
 		bstatus->max_hp = battle_config.max_hp;
 	else if(!bstatus->max_hp)
 		bstatus->max_hp = 1;
-
+	
 	// ----- SP MAX CALCULATION -----
 
 	// Basic MaxSP value
@@ -4350,7 +4356,10 @@ static int status_calc_batk(struct block_list *bl, struct status_change *sc, int
 		batk += batk * sc->data[SC_SHRIMP]->val2 / 100;
 	if (sc->data[SC_SUNSTANCE] != NULL)
 		batk += batk * sc->data[SC_SUNSTANCE]->val2 / 100;
-
+#ifdef RENEWAL	
+	if (sc->data[SC_SHOUT])
+		batk += 30; //should we use a variable for later changes?
+#endif
 	return cap_value(batk, battle_config.batk_min, battle_config.batk_max);
 }
 
@@ -4589,6 +4598,8 @@ static int status_calc_critical(struct block_list *bl, struct status_change *sc,
 #ifdef RENEWAL
 	if (sc->data[SC_SPEARQUICKEN])
 		critical += 3*sc->data[SC_SPEARQUICKEN]->val1 * 10;
+	if(sc->data[SC_TWOHANDQUICKEN])
+		critical += sc->data[SC_TWOHANDQUICKEN]->val4 * 10;
 #endif
 
 	if (sc->data[SC__INVISIBILITY])
@@ -4660,6 +4671,14 @@ static int status_calc_hit(struct block_list *bl, struct status_change *sc, int 
 		hit -= sc->data[SC_HEAT_BARREL]->val4;
 	if (sc->data[SC_SOULFALCON] != NULL)
 		hit += sc->data[SC_SOULFALCON]->val3;
+#ifdef RENEWAL
+	if(sc->data[SC_BLESSING])
+		hit += sc->data[SC_BLESSING]->val2 * 2;
+	if(sc->data[SC_TWOHANDQUICKEN])
+		hit += sc->data[SC_TWOHANDQUICKEN]->val5;
+	if(sc->data[SC_ADRENALINE])
+		hit += sc->data[SC_ADRENALINE]->val5;
+#endif
 
 	return cap_value(hit, battle_config.hit_min, battle_config.hit_max);
 }
@@ -5403,6 +5422,14 @@ static short status_calc_aspd(struct block_list *bl, struct status_change *sc, s
 			bonus += sc->data[SC_STEAMPACK]->val2;
 		if (sc->data[SC_SKF_ASPD] != NULL)
 			bonus += sc->data[SC_SKF_ASPD]->val1;
+#ifdef Renewal
+		if (sc->data[SC_INC_AGI])
+			bonus += sc->data[SC_INC_AGI]->val3; 
+		if(sc->data[SC_TWOHANDQUICKEN])
+			bonus += sc->data[SC_TWOHANDQUICKEN]->val3;
+		if(sc->data[SC_ADRENALINE])
+			bonus += sc->data[SC_ADRENALINE]->val4;
+#endif	
 	}
 
 	return (bonus + pots);
@@ -7412,6 +7439,7 @@ static int status_change_start_sub(struct block_list *src, struct block_list *bl
 			case SC_DEC_AGI:
 			case SC_INC_AGI:
 				val2 = 2 + val1; //Agi change
+				val3 = val1; // %aspd buff
 				break;
 			case SC_ENDURE:
 				val2 = 7; // Hit-count [Celest]
@@ -7591,7 +7619,10 @@ static int status_change_start_sub(struct block_list *src, struct block_list *bl
 				break;
 			case SC_ONEHANDQUICKEN:
 			case SC_TWOHANDQUICKEN:
-				val2 = 300;
+				val2 = 300; //"flat" aspd bonus
+				val3 = 10; //%aspd bonus, used in Renewal only
+				val4 = va11 + 2; //%Crit rate bonus, used in Renewal only, it is x10 in calc
+				val5 = val1 * 2; //Hit bonus, used in renewal only
 				if (val1 > 10) //For boss casted skills [Skotlex]
 					val2 += 20*(val1-10);
 				break;
@@ -8081,6 +8112,8 @@ static int status_change_start_sub(struct block_list *src, struct block_list *bl
 			case SC_ADRENALINE2:
 			case SC_ADRENALINE:
 				val3 = (val2) ? 300 : 200; // aspd increase
+				val4 = 10; //%aspd increase, used in renewal only
+				val5 = 5 + 3 * val1; //hit increase, renewal only
 				FALLTHROUGH
 			case SC_WEAPONPERFECT:
 				if(sd && pc->checkskill(sd,BS_HILTBINDING)>0)

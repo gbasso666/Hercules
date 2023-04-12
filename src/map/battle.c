@@ -1675,8 +1675,18 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					skillratio += 30 * skill_lv;
 					break;
 				case WZ_STORMGUST:
+#ifdef RENEWAL
+					skillratio -= 30; // Offset only once
+					skillratio += 50 * skill_lv;
+#else
 					skillratio += 40 * skill_lv;
+#endif
 					break;
+#ifdef RENEWAL
+				case WZ_EARTHSPIKE:
+					skillratio += 100;
+					break;
+#endif
 				case HW_NAPALMVULCAN:
 					skillratio += 10 * skill_lv - 30;
 					break;
@@ -1730,33 +1740,24 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 				case NPC_ENERGYDRAIN:
 					skillratio += 100 * skill_lv;
 					break;
-			#ifdef RENEWAL
+#ifdef RENEWAL
 				case WZ_HEAVENDRIVE:
 				case WZ_METEOR:
 					skillratio += 25;
 					break;
-				case WZ_VERMILION:
-				{
-					int interval = 0, per = interval, ratio = per;
-					while( (per++) < skill_lv ){
-						ratio += interval;
-						if(per%3==0) interval += 20;
-					}
-					if( skill_lv > 9 )
-						ratio -= 10;
-					skillratio += ratio;
-				}
+				case WZ_VERMILION: //wtf was that formula??? anyways, the new one is a lot simplier... 
+					skillratio += 300 + skill_lv * 100; //technically monsters should be using the old one, but that's probably Gravity being lazy
 					break;
 				case NJ_HUUJIN:
 					skillratio += 50;
 					if (sd && sd->charm_type == CHARM_TYPE_WIND && sd->charm_count > 0)
 						skillratio += 20 * sd->charm_count;
 					break;
-			#else
+#else
 				case WZ_VERMILION:
 					skillratio += 20*skill_lv-20;
 					break;
-			#endif
+#endif
 				/**
 				 * Summoner
 				 **/
@@ -2081,19 +2082,25 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 				case KN_SPEARBOOMERANG:
 					skillratio += 50*skill_lv;
 					break;
+#ifdef RENEWAL
 				case KN_BRANDISHSPEAR:
-				case ML_BRANDISH:
-				{
-					int ratio = 100 + 20 * skill_lv;
-					skillratio += ratio - 100;
-					if(skill_lv>3 && flag==1) skillratio += ratio / 2;
-					if(skill_lv>6 && flag==1) skillratio += ratio / 4;
-					if(skill_lv>9 && flag==1) skillratio += ratio / 8;
-					if(skill_lv>6 && flag==2) skillratio += ratio / 2;
-					if(skill_lv>9 && flag==2) skillratio += ratio / 4;
-					if(skill_lv>9 && flag==3) skillratio += ratio / 2;
+					skillratio += -100 + 400 + 100 * skill_lv + sstatus->str * 5; //rathena is using * 3 here, but IRO and other sites say it's str*5.
 					break;
-				}
+#else
+				case KN_BRANDISHSPEAR:
+#endif
+				case ML_BRANDISH:
+					{
+						int ratio = 100 + 20 * skill_lv;
+						skillratio += ratio - 100;
+						if(skill_lv>3 && flag==1) skillratio += ratio / 2;
+						if(skill_lv>6 && flag==1) skillratio += ratio / 4;
+						if(skill_lv>9 && flag==1) skillratio += ratio / 8;
+						if(skill_lv>6 && flag==2) skillratio += ratio / 2;
+						if(skill_lv>9 && flag==2) skillratio += ratio / 4;
+						if(skill_lv>9 && flag==3) skillratio += ratio / 2;
+					}
+					break;
 				case KN_BOWLINGBASH:
 				case MS_BOWLINGBASH:
 					skillratio+= 40 * skill_lv;
@@ -2104,8 +2111,15 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 				case AS_POISONREACT:
 					skillratio += 30 * skill_lv;
 					break;
+					
 				case AS_SONICBLOW:
+#ifdef RENEWAL
+					skillratio += 100 + 100 * skill_lv;
+					if (tstatus->hp < (tstatus->max_hp / 2))
+					skillratio += skillratio / 2;
+#else
 					skillratio += 300 + 40 * skill_lv;
+#endif
 					break;
 				case TF_SPRINKLESAND:
 					skillratio += 30;
@@ -2188,7 +2202,7 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					skillratio += 75 * skill_lv;
 					break;
 				case MO_EXTREMITYFIST:
-	#ifndef RENEWAL
+#ifndef RENEWAL
 					{
 						//Overflow check. [Skotlex]
 						unsigned int ratio = skillratio + 100*(8 + st->sp/10);
@@ -2230,7 +2244,13 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					skillratio += i;
 					break;
 				case ASC_METEORASSAULT:
+#ifdef RENEWAL
+					skillratio += 100 + 120 * skill_lv + 5 * st->str;
+						if(status->get_lv(src) > 100)
+						skillratio = skillratio * status_get_lv(src) / 100; //This new buff was used in several skills, maybe we should create a function?
+#else
 					skillratio += 40 * skill_lv - 60;
+#endif
 					break;
 				case SN_SHARPSHOOTING:
 				case MA_SHARPSHOOTING:
@@ -2240,7 +2260,11 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					skillratio += 100 + 100 * skill_lv;
 					break;
 				case AS_SPLASHER:
+#ifdef RENEWAL
+					skillratio += -100 + 400 + 100 * skill_lv;
+#else
 					skillratio += 400 + 50 * skill_lv;
+#endif
 					if(sd)
 						skillratio += 20 * pc->checkskill(sd,AS_POISONREACT);
 					break;
@@ -3779,7 +3803,11 @@ static int battle_range_type(struct block_list *src, struct block_list *target, 
 		else
 			return BF_LONG;
 	}
-
+	// Renewal changes to ranged physical damage
+#ifdef RENEWAL
+	if (skill_id == KN_BRANDISHSPEAR)
+		return BF_SHORT;
+#endif
 	//based on used skill's range
 	if (skill->get_range2(src, skill_id, skill_lv) < 5)
 		return BF_SHORT;
