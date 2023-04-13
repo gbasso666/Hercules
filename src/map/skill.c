@@ -1800,7 +1800,11 @@ static int skill_additional_effect(struct block_list *src, struct block_list *bl
 			break;
 
 		case AM_DEMONSTRATION:
+#ifdef RENEWAL
+			skill->break_equip(bl, EQP_WEAPON, 300*skill_lv, BCT_ENEMY); //renewal improved chance to break
+#else
 			skill->break_equip(bl, EQP_WEAPON, 100*skill_lv, BCT_ENEMY);
+#endif
 			break;
 
 		case CR_SHIELDCHARGE:
@@ -5231,21 +5235,22 @@ static int skill_castend_damage_id(struct block_list *src, struct block_list *bl
 						pc->overheat(sd,1);
 					}
 				}
-
+#ifndef Renewal //RENEWAL REMOVED split damage, so I assume this sections should be pre-re only, but I'm not sure.
 				// if skill damage should be split among targets, count them
 				//SD_LEVEL -> Forced splash damage for Auto Blitz-Beat -> count targets
 				//special case: Venom Splasher uses a different range for searching than for splashing
 				if( flag&SD_LEVEL || skill->get_nk(skill_id)&NK_SPLASHSPLIT )
 					skill->area_temp[0] = map->foreachinrange(skill->area_sub, bl, (skill_id == AS_SPLASHER)?1:skill->get_splash(skill_id, skill_lv), BL_CHAR, src, skill_id, skill_lv, tick, BCT_ENEMY, skill->area_sub_count);
-
+				
 				// recursive invocation of skill->castend_damage_id() with flag|1
 				map->foreachinrange(skill->area_sub, bl, skill->get_splash(skill_id, skill_lv), skill->splash_target(src), src, skill_id, skill_lv, tick, flag|BCT_ENEMY|SD_SPLASH|1, skill->castend_damage_id);
 
 				if (skill_id == AS_SPLASHER) {
-					// Prevent double item consumption when the target explodes (item requirements have already been processed in skill_castend_nodamage_id)
+					// Prevent double item consumption when the target explodes (item requirements have already been processed in skill_castend_nodamage_id).
+					//RENEWAL removed the gem cost
 					flag |= 1;
 				}
-
+#endif
 				if (sd && skill_id == SU_LUNATICCARROTBEAT) {
 					short item_idx = pc->search_inventory(sd, ITEMID_CARROT);
 
@@ -14027,8 +14032,10 @@ static int skill_unit_onplace_timer(struct skill_unit *src, struct block_list *b
 			break;
 
 		case UNT_MAGNUS:
+#ifndef Renewal
 			if (!battle->check_undead(tstatus->race,tstatus->def_ele) && tstatus->race!=RC_DEMON)
 				break;
+#endif
 			skill->attack(BF_MAGIC,ss,&src->bl,bl,sg->skill_id,sg->skill_lv,tick,0);
 			break;
 
@@ -17152,10 +17159,10 @@ static int skill_castfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv
 	//ShowInfo("Castime castfix = %d\n",time);
 	return time;
 }
-
 /*==========================================
  * Does cast-time reductions based on sc data.
  *------------------------------------------*/
+#ifndef RENEWAL_CAST ///Looks like this section only applies to pre-re cast. Looking at rathena code indicates the same
 static int skill_castfix_sc(struct block_list *bl, int time)
 {
 	struct status_change *sc = status->get_sc(bl);
@@ -17185,18 +17192,16 @@ static int skill_castfix_sc(struct block_list *bl, int time)
 			time -= time * sc->data[SC_POEMBRAGI]->val2 / 100;
 		if (sc->data[SC_SKF_CAST] != NULL)
 			time -= time * sc->data[SC_SKF_CAST]->val1 / 100;
-		if (sc->data[SC_IZAYOI])
-			time -= time * 50 / 100;
+
 	}
 	time = max(time, 0);
 
 	//ShowInfo("Castime castfix_sc = %d\n",time);
 	return time;
 }
-
+#else 
 static int skill_vfcastfix(struct block_list *bl, double time, uint16 skill_id, uint16 skill_lv)
 {
-#ifdef RENEWAL_CAST
 	struct status_change *sc = status->get_sc(bl);
 	struct map_session_data *sd = BL_CAST(BL_PC,bl);
 	int fixed = skill->get_fixed_cast(skill_id, skill_lv), fixcast_r = 0, varcast_r = 0, i = 0;
@@ -17254,7 +17259,9 @@ static int skill_vfcastfix(struct block_list *bl, double time, uint16 skill_id, 
 		// Variable cast reduction bonuses
 		if (sc->data[SC_SUFFRAGIUM]) {
 			VARCAST_REDUCTION(sc->data[SC_SUFFRAGIUM]->val2);
-			status_change_end(bl, SC_SUFFRAGIUM, INVALID_TIMER);
+	#ifndef RENEWAL
+			status_change_end(bl, SC_SUFFRAGIUM, INVALID_TIMER); //renewal rebalance removed the condition of only 1 cast
+	#endif
 		}
 		if (sc->data[SC_MEMORIZE]) {
 			VARCAST_REDUCTION(50);

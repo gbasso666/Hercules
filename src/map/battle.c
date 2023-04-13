@@ -776,6 +776,9 @@ static int64 battle_addmastery(struct map_session_data *sd, struct block_list *t
 		case W_2HMACE:
 			if((skill_lv = pc->checkskill(sd,PR_MACEMASTERY)) > 0)
 				damage += (skill_lv * 3);
+#ifdef Renewal
+				sstatus->cri += skill_lv; //not sure if it will work, rathena adds this bonus in Status.cpp, but here seems more elegant.
+#endif
 			if((skill_lv = pc->checkskill(sd,NC_TRAININGAXE)) > 0)
 				damage += (skill_lv * 5);
 			break;
@@ -1682,11 +1685,26 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					skillratio += 40 * skill_lv;
 #endif
 					break;
+				case WZ_VERMILION: 
+#ifdef RENEWAL			
+					skillratio += 300 + skill_lv * 100; //technically monsters should be using the old one, but w/e
+#else
+					skillratio += 20*skill_lv-20;
+#endif
+					break;
 #ifdef RENEWAL
+				case WZ_HEAVENDRIVE:
+				case WZ_METEOR:
+					skillratio += 25;
+					break;
 				case WZ_EARTHSPIKE:
 					skillratio += 100;
 					break;
-#endif
+				case PR_MAGNUS:
+					if (battle_check_undead(tstatus->race, tstatus->def_ele) || tstatus->race == RC_DEMON)
+					skillratio += 30;
+					break;	
+#endif	
 				case HW_NAPALMVULCAN:
 					skillratio += 10 * skill_lv - 30;
 					break;
@@ -1722,6 +1740,11 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					if (sd && sd->charm_type == CHARM_TYPE_WATER && sd->charm_count > 0)
 						skillratio += 5 * sd->charm_count;
 					break;
+				case NJ_HUUJIN:
+					skillratio += 50;
+					if (sd && sd->charm_type == CHARM_TYPE_WIND && sd->charm_count > 0)
+						skillratio += 20 * sd->charm_count;
+					break;
 #endif
 				case NJ_HYOUSYOURAKU:
 					skillratio += 50 * skill_lv;
@@ -1739,25 +1762,7 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					/* Fall through */
 				case NPC_ENERGYDRAIN:
 					skillratio += 100 * skill_lv;
-					break;
-#ifdef RENEWAL
-				case WZ_HEAVENDRIVE:
-				case WZ_METEOR:
-					skillratio += 25;
-					break;
-				case WZ_VERMILION: //wtf was that formula??? anyways, the new one is a lot simplier... 
-					skillratio += 300 + skill_lv * 100; //technically monsters should be using the old one, but that's probably Gravity being lazy
-					break;
-				case NJ_HUUJIN:
-					skillratio += 50;
-					if (sd && sd->charm_type == CHARM_TYPE_WIND && sd->charm_count > 0)
-						skillratio += 20 * sd->charm_count;
-					break;
-#else
-				case WZ_VERMILION:
-					skillratio += 20*skill_lv-20;
-					break;
-#endif
+					break;		
 				/**
 				 * Summoner
 				 **/
@@ -2110,8 +2115,7 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					break;
 				case AS_POISONREACT:
 					skillratio += 30 * skill_lv;
-					break;
-					
+					break;				
 				case AS_SONICBLOW:
 #ifdef RENEWAL
 					skillratio += 100 + 100 * skill_lv;
@@ -2172,7 +2176,11 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					skillratio += 20 * skill_lv;
 					break;
 				case CR_SHIELDBOOMERANG:
+#ifdef RENEWAL		
+					skillratio += -100 + 80 * skill_lv;
+#else
 					skillratio += 30 * skill_lv;
+#endif
 					break;
 				case NPC_DARKCROSS:
 				case CR_HOLYCROSS:
@@ -2186,11 +2194,20 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					break;
 				}
 				case AM_DEMONSTRATION:
+#ifdef RENEWAL
+					skillratio += -100 + 60 * skill_lv;
+						if(sd)
+						skillratio += 20 * pc->checkskill(sd,AM_LEARNINGPOTION);
+					break;
+#else			
 					skillratio += 20 * skill_lv;
+#endif
 					break;
 				case AM_ACIDTERROR:
 #ifdef RENEWAL
-					skillratio += 80 * skill_lv + 100;
+					skillratio += -100 + 200 * skill_lv;
+					if(sd)
+						skillratio += 20 * pc->checkskill(sd,AM_LEARNINGPOTION);
 #else
 					skillratio += 40 * skill_lv;
 #endif
@@ -2264,9 +2281,9 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					skillratio += -100 + 400 + 100 * skill_lv;
 #else
 					skillratio += 400 + 50 * skill_lv;
-#endif
 					if(sd)
 						skillratio += 20 * pc->checkskill(sd,AS_POISONREACT);
+#endif
 					break;
 	#ifndef RENEWAL
 				case ASC_BREAKER:
@@ -5420,9 +5437,11 @@ static struct Damage battle_calc_weapon_attack(struct block_list *src, struct bl
 					ATK_ADD(sstatus->rhw.atk2); //Else use Atk2
 				ATK_RATE(battle->calc_skillratio(BF_WEAPON, src, target, skill_id, skill_lv, skillratio, wflag));
 				break;
-			case AM_DEMONSTRATION:
+
+			case AM_DEMONSTRATION: 
 			case AM_ACIDTERROR: // [malufett/Hercules]
 			{
+#ifndef RENEWAL  //on renewal this nonsense of using both atk and matk was removed, both skills use ATK
 				int64 matk;
 				int totaldef = status->get_total_def(target) + status->get_total_mdef(target);
 				matk = battle->calc_cardfix(BF_MAGIC, src, target, nk, s_ele, 0, status->get_matk(src, 2), 0, wd.flag);
@@ -5432,6 +5451,7 @@ static struct Damage battle_calc_weapon_attack(struct block_list *src, struct bl
 				ATK_RATE(battle->calc_skillratio(BF_WEAPON, src, target, skill_id, skill_lv, skillratio, wflag));
 				ATK_ADD(matk);
 				ATK_ADD(-totaldef);
+#endif
 				if ( skill_id == AM_ACIDTERROR && is_boss(target) )
 					ATK_RATE(50);
 				if ( skill_id == AM_DEMONSTRATION )

@@ -2198,7 +2198,6 @@ static int status_calc_pc_(struct map_session_data *sd, enum e_status_calc_opt o
 		sd->subrace[RC_DRAGON] += skill_lv;
 #endif
 	}
-
 	if ((skill_lv = pc->checkskill(sd, AB_EUCHARISTICA)) > 0) {
 		sd->right_weapon.addrace[RC_DEMON] += skill_lv;
 		sd->right_weapon.addele[ELE_DARK] += skill_lv;
@@ -4575,12 +4574,10 @@ static int status_calc_critical(struct block_list *bl, struct status_change *sc,
 {
 	if (!sc || !sc->count)
 		return cap_value(critical, battle_config.critical_min, battle_config.critical_max);
-
 	if (!viewable) {
 		/* some statuses that are hidden in the status window */
 		return cap_value(critical, battle_config.critical_min, battle_config.critical_max);
 	}
-
 	if (sc->data[SC_CRITICALPERCENT])
 		critical += sc->data[SC_CRITICALPERCENT]->val2;
 	if (sc->data[SC_FOOD_CRITICALSUCCESSVALUE])
@@ -4601,7 +4598,6 @@ static int status_calc_critical(struct block_list *bl, struct status_change *sc,
 	if(sc->data[SC_TWOHANDQUICKEN])
 		critical += sc->data[SC_TWOHANDQUICKEN]->val4 * 10;
 #endif
-
 	if (sc->data[SC__INVISIBILITY])
 		critical += sc->data[SC__INVISIBILITY]->val3;
 	if (sc->data[SC__UNLUCKY])
@@ -5354,7 +5350,6 @@ static short status_calc_aspd(struct block_list *bl, struct status_change *sc, s
 			bonus = 15;
 		else if (sc->data[SC_GS_MADNESSCANCEL] && bonus < 20)
 			bonus = 20;
-
 	} else {
 		// ASPD percentage values
 		if (sc->data[SC_DONTFORGETME])
@@ -5422,16 +5417,17 @@ static short status_calc_aspd(struct block_list *bl, struct status_change *sc, s
 			bonus += sc->data[SC_STEAMPACK]->val2;
 		if (sc->data[SC_SKF_ASPD] != NULL)
 			bonus += sc->data[SC_SKF_ASPD]->val1;
-#ifdef Renewal
+	#ifdef Renewal 
 		if (sc->data[SC_INC_AGI])
-			bonus += sc->data[SC_INC_AGI]->val3; 
+			bonus += sc->data[SC_INC_AGI]->val3;
 		if(sc->data[SC_TWOHANDQUICKEN])
 			bonus += sc->data[SC_TWOHANDQUICKEN]->val3;
 		if(sc->data[SC_ADRENALINE])
 			bonus += sc->data[SC_ADRENALINE]->val4;
-#endif	
-	}
-
+		if(sc->data[SC_SPEARQUICKEN])
+			bonus += sc->data[SC_SPEARQUICKEN]->val3;
+	#endif	
+ 	}
 	return (bonus + pots);
 #else
 	return 0;
@@ -5454,7 +5450,6 @@ static short status_calc_fix_aspd(struct block_list *bl, struct status_change *s
 		aspd -= sc->data[SC_HEAT_BARREL]->val1 * 10;
 	if (sc->data[SC_SOULSHADOW] != NULL)
 		aspd -= 10 * sc->data[SC_SOULSHADOW]->val2;
-
 	if (sc->data[SC_OVERED_BOOST]) // should be final and unmodifiable by any means
 		aspd = (200 - sc->data[SC_OVERED_BOOST]->val3) * 10;
 	return cap_value(aspd, 0, 2000); // will be recap for proper bl anyway
@@ -5605,7 +5600,6 @@ static short status_calc_aspd_rate(struct block_list *bl, struct status_change *
 		aspd_rate -= sc->data[SC_SKF_ASPD]->val1 * 10;
 	if (sc->data[SC_STARSTANCE] != NULL)
 		aspd_rate -= 10 * sc->data[SC_STARSTANCE]->val2;
-
 	return (short)cap_value(aspd_rate,0,SHRT_MAX);
 }
 
@@ -7629,11 +7623,10 @@ static int status_change_start_sub(struct block_list *src, struct block_list *bl
 			case SC_MER_QUICKEN:
 				val2 = 300;
 				break;
-	#ifndef RENEWAL_ASPD
 			case SC_SPEARQUICKEN:
 				val2 = 200+10*val1;
+				val3 = 10; //used in renewal
 				break;
-	#endif
 			case SC_DANCING:
 				//val1 : Skill ID + LV
 				//val2 : Skill Group of the Dance.
@@ -8295,7 +8288,11 @@ static int status_change_start_sub(struct block_list *src, struct block_list *bl
 				val2 = val1*10; //Actual boost (since 100% = 1000)
 				break;
 			case SC_SUFFRAGIUM:
+#ifdef Renewal
+				val2 = 5 + 5 * val1; //Speed cast decrease
+#else
 				val2 = 15 * val1; //Speed cast decrease
+#endif
 				break;
 			case SC_HEALPLUS:
 				if (val1 < 1)
