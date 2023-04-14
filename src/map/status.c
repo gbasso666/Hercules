@@ -2309,7 +2309,16 @@ static int status_calc_pc_(struct map_session_data *sd, enum e_status_calc_opt o
 			sd->magic_addele[ELE_WIND] += 25;
 		if (sc->data[SC_EARTH_INSIGNIA] && sc->data[SC_EARTH_INSIGNIA]->val1 == 3)
 			sd->magic_addele[ELE_EARTH] += 25;
-
+#ifdef RENEWAL //renewal endow buff
+		if (sc->data[SC_PROPERTYFIRE])
+			sd->magic_addele[ELE_FIRE] += sc->data[SC_PROPERTYFIRE]->val1;
+		if (sc->data[SC_PROPERTYWATER])
+			sd->magic_addele[ELE_WATER] += sc->data[SC_PROPERTYWATER]->val1;
+		if (sc->data[SC_PROPERTYWIND])
+			sd->magic_addele[ELE_WIND] += sc->data[SC_PROPERTYWIND]->val1;
+		if (sc->data[SC_PROPERTYGROUND])
+			sd->magic_addele[ELE_EARTH] += sc->data[SC_PROPERTYGROUND]->val1;
+#endif
 		// Geffen Scrolls
 		if (sc->data[SC_SKELSCROLL]) {
 #ifdef RENEWAL
@@ -4541,7 +4550,9 @@ static int status_calc_matk(struct block_list *bl, struct status_change *sc, int
 		matk += sc->data[SC_MTF_MATK]->val1;
 	if (sc->data[SC_MYSTICSCROLL])
 		matk += matk * sc->data[SC_MYSTICSCROLL]->val1 / 100;
-
+	if(sc->data[SC_VOLCANO])
+		matk += sc->data[SC_VOLCANO]->val2; //renewal buff
+	
 	// Eden Crystal Synthesis
 	if (sc->data[SC_QUEST_BUFF1])
 		matk += sc->data[SC_QUEST_BUFF1]->val1;
@@ -7577,7 +7588,11 @@ static int status_change_start_sub(struct block_list *src, struct block_list *bl
 				//Val1 Skill LV of Autospell
 				//Val2 Skill ID to cast
 				//Val3 Max Lv to cast
+		#ifdef RENEWAL
+				val4 = val1*2; //Chance of casting		
+		#else
 				val4 = 5 + val1*2; //Chance of casting
+		#endif
 				break;
 			case SC_VOLCANO:
 				val2 = val1*10; //Watk increase

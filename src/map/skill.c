@@ -7233,13 +7233,18 @@ static int skill_castend_nodamage_id(struct block_list *src, struct block_list *
 					break;
 				}
 			}
+#ifdef RENEWAL
+			if (!clif->skill_nodamage(src, bl, skill_id, skill_lv, sc_start(src, bl, type, 100, skill_lv, skill->get_time(skill_id, skill_lv), skill_id))) { //RENEWAL buff never fails
+#else
 			// 100% success rate at lv4 & 5, but lasts longer at lv5
 			if (!clif->skill_nodamage(src, bl, skill_id, skill_lv, sc_start(src, bl, type, (60 + skill_lv * 10), skill_lv, skill->get_time(skill_id, skill_lv), skill_id))) {
+#endif
 				if (sd)
 					clif->skill_fail(sd, skill_id, USESKILL_FAIL_LEVEL, 0, 0);
 				if (skill->break_equip(bl, EQP_WEAPON, 10000, BCT_PARTY) && sd && sd != dstsd)
 					clif->message(sd->fd, msg_sd(sd,869)); // "You broke the target's weapon."
 			}
+
 			break;
 
 		case PR_ASPERSIO:
@@ -8784,14 +8789,43 @@ static int skill_castend_nodamage_id(struct block_list *src, struct block_list *
 				clif->autospell(sd,skill_lv);
 			}else {
 				int maxlv=1,spellid=0;
+#ifdef RENEWAL
+				if (skill_lv > 1)
+					maxlv = skill_lv /2;
+				
+				static const int spellarray1[3] = { MG_COLDBOLT,MG_FIREBOLT,MG_LIGHTNINGBOLT };
+				static const int spellarray2[2] = { MG_SOULSTRIKE,MG_FIREBALL };
+				static const int spellarray3[2] = { WZ_EARTHSPIKE,MG_FROSTDIVER };
+				static const int spellarray4[2] = { MG_THUNDERSTORM,WZ_HEAVENDRIVE };
+				if(skill_lv >= 10) {
+					int i = rnd() % ARRAYLENGTH(spellarray4);
+					spellid = spellarray4[i];
+				}
+				else if(skill_lv >=7) {
+					int i = rnd() % ARRAYLENGTH(spellarray3);
+					spellid = spellarray3[i];
+				}
+				else if(skill_lv >=4) {
+					int i = rnd() % ARRAYLENGTH(spellarray2);
+					spellid = spellarray2[i];
+				}
+				else if(skill_lv >=1) {
+					int i = rnd() % ARRAYLENGTH(spellarray1);
+					spellid = spellarray1[i];
+				}
+				if(spellid > 0)
+					sc_start4(src,src,SC_AUTOSPELL,100,skill_lv,spellid,maxlv,0,
+						skill->get_time(SA_AUTOSPELL, skill_lv), SA_AUTOSPELL);
+			}
+#else
 				static const int spellarray[3] = { MG_COLDBOLT,MG_FIREBOLT,MG_LIGHTNINGBOLT };
 				if(skill_lv >= 10) {
 					spellid = MG_FROSTDIVER;
-#if 0
+	#if 0
 					if (tsc && tsc->data[SC_SOULLINK] && tsc->data[SC_SOULLINK]->val2 == SA_SAGE)
 						maxlv = 10;
 					else
-#endif // 0
+	#endif // 0
 						maxlv = skill_lv - 9;
 				}
 				else if(skill_lv >=8) {
@@ -8815,6 +8849,7 @@ static int skill_castend_nodamage_id(struct block_list *src, struct block_list *
 					sc_start4(src,src,SC_AUTOSPELL,100,skill_lv,spellid,maxlv,0,
 						skill->get_time(SA_AUTOSPELL, skill_lv), SA_AUTOSPELL);
 			}
+#endif
 			break;
 
 		case BS_GREED:
@@ -17053,7 +17088,11 @@ static struct skill_condition skill_get_requirement(struct map_session_data *sd,
 					switch( sc->data[SC_COMBOATTACK]->val1 )
 					{
 						case MO_COMBOFINISH:
+#ifdef RENEWAL
+							req.spiritball = 1; //renewal buff
+#else
 							req.spiritball = 4;
+#endif
 							break;
 						case CH_TIGERFIST:
 							req.spiritball = 3;
