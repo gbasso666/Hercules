@@ -2318,6 +2318,7 @@ static int status_calc_pc_(struct map_session_data *sd, enum e_status_calc_opt o
 			sd->magic_addele[ELE_WIND] += sc->data[SC_PROPERTYWIND]->val1;
 		if (sc->data[SC_PROPERTYGROUND])
 			sd->magic_addele[ELE_EARTH] += sc->data[SC_PROPERTYGROUND]->val1;
+		//NEW BASILICA REWORK SHOULD BE PUT HERE PROBABLY
 #endif
 		// Geffen Scrolls
 		if (sc->data[SC_SKELSCROLL]) {
@@ -4932,7 +4933,7 @@ static signed short status_calc_def2(struct block_list *bl, struct status_change
 		/* some statuses that are hidden in the status window */
 #ifdef RENEWAL
 		if (sc->data[SC_ASSUMPTIO])
-			def2 <<= 1;
+			def2 += sc->data[SC_ASSUMPTIO]->val1 * 50; //TODO: Assumptio should increase heal received by (skill lvl * 2%)
 #endif
 		if (sc->data[SC_CAMOUFLAGE])
 			def2 -= def2 * 5 * (10-sc->data[SC_CAMOUFLAGE]->val4) / 100;
@@ -5070,9 +5071,9 @@ static signed short status_calc_mdef2(struct block_list *bl, struct status_chang
 		if(sc->data[SC_MINDBREAKER])
 			mdef2 -= mdef2 * sc->data[SC_MINDBREAKER]->val3/100;
 #ifdef RENEWAL
-		if (sc->data[SC_ASSUMPTIO])
-			mdef2 <<= 1;
-		return (short)cap_value(mdef2,SHRT_MIN,SHRT_MAX);
+		//if (sc->data[SC_ASSUMPTIO])
+		//	mdef2 <<= 1;
+		//return (short)cap_value(mdef2,SHRT_MIN,SHRT_MAX);
 #else
 		return (short)cap_value(mdef2,1,SHRT_MAX);
 #endif
@@ -7483,15 +7484,15 @@ static int status_change_start_sub(struct block_list *src, struct block_list *bl
 				total_tick = INFINITE_DURATION; // duration sent to the client should be infinite
 				break;
 			case SC_EDP: // [Celest]
-				//Chance to Poison enemies.
 #ifdef RENEWAL_EDP
-				val2 = ((val1 + 1) / 2 + 2);
+				val2 = ((val1 + 1) / 2 + 2); //Chance to Poison enemies.
+				val3 = 150 + val1 * 30; //From rathena and iROwiki = dmg *(2.5 + (edp level * .3)). Since we are adding damage in the calculations, the formula for renewal is 150+30*lvl
 #else
-				val2 = val1 + 2;
-#endif
+				val2 = val1 + 2; //Chance to Poison enemies.
 				val3 = 50 * (val1 + 1); //Damage increase (+50 +50*lv%)
-				if( sd )//[Ind] - iROwiki says each level increases its duration by 3 seconds
-					total_tick += pc->checkskill(sd,GC_RESEARCHNEWPOISON)*3000;
+#endif
+				if( sd && pc->checkskill(sd,GC_RESEARCHNEWPOISON) > 0)//[Ind] - iROwiki says each level increases its duration by 3 seconds >[gbasso] updated in 2022 to researchlvl*15 + 30sec
+					total_tick += 30000 + pc->checkskill(sd,GC_RESEARCHNEWPOISON)*15000;
 				break;
 			case SC_POISONREACT:
 				val2=(val1+1)/2 + val1/10; // Number of counters [Skotlex]
@@ -8128,9 +8129,14 @@ static int status_change_start_sub(struct block_list *src, struct block_list *bl
 					total_tick += total_tick / 10;
 				break;
 			case SC_LKCONCENTRATION:
-				val2 = 5*val1; //Batk/Watk Increase
 				val3 = 10*val1; //Hit Increase
+	#ifdef RENEWAL
+				val2 = 5 + 2*val1; //Batk/Watk Increase >>RENEWAL changed 
+				val4 = 5 + 2*val1; //Def reduction >>RENEWAL changed 
+	#else
+				val2 = 5*val1; //Batk/Watk Increase
 				val4 = 5*val1; //Def reduction
+	#endif
 				sc_start(src, bl, SC_ENDURE, 100, 1, total_tick, skill_id); // Endure effect
 				break;
 			case SC_ANGELUS:
@@ -10270,6 +10276,7 @@ static bool status_end_sc_before_start(struct block_list *bl, struct status_data
 		}
 
 		break;
+#ifndef RENEWAL
 	case SC_ASSUMPTIO:
 		status_change_end(bl, SC_KYRIE, INVALID_TIMER);
 		status_change_end(bl, SC_KAITE, INVALID_TIMER);
@@ -10277,6 +10284,7 @@ static bool status_end_sc_before_start(struct block_list *bl, struct status_data
 	case SC_KAITE:
 		status_change_end(bl, SC_ASSUMPTIO, INVALID_TIMER);
 		break;
+#endif
 	case SC_CARTBOOST:
 		if (sc->data[SC_DEC_AGI] != NULL || sc->data[SC_ADORAMUS] != NULL) {
 			// Cancel Decrease Agi, but take no further effect [Skotlex]

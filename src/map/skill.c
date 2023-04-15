@@ -1124,6 +1124,10 @@ static sc_type skill_get_sc_type(int skill_id)
 static int skill_calc_heal(struct block_list *src, struct block_list *target, uint16 skill_id, uint16 skill_lv, bool heal)
 {
 	int skill2_lv, hp;
+	
+#ifdef RENEWAL
+	int hp_bonus = 0;
+#endif
 	struct map_session_data *sd = BL_CAST(BL_PC, src);
 	struct map_session_data *tsd = BL_CAST(BL_PC, target);
 	struct status_change* sc;
@@ -1203,6 +1207,10 @@ static int skill_calc_heal(struct block_list *src, struct block_list *target, ui
 			hp = hp * 150 / 100;
 		if (sc->data[SC_NO_RECOVER_STATE])
 			hp = 0;
+#ifdef RENEWAL
+		if(sc->data[SC_ASSUMPTIO])
+			hp_bonus += sc->data[SC_ASSUMPTIO]->val1 * 2;
+#endif
 	}
 
 #ifdef RENEWAL
@@ -1216,6 +1224,8 @@ static int skill_calc_heal(struct block_list *src, struct block_list *target, ui
 		default:
 			hp += status->get_matk(src, 3);
 	}
+	if (hp_bonus)
+		hp += hp * hp_bonus / 100;
 #endif // RENEWAL
 	return hp;
 }
@@ -2372,8 +2382,10 @@ static int skill_additional_effect(struct block_list *src, struct block_list *bl
 					rate += 10;
 				if(sc->data[SC_OVERTHRUST])
 					rate += 10;
-				if(sc->data[SC_OVERTHRUSTMAX])
+#ifndef RENEWAL
+				if(sc->data[SC_OVERTHRUSTMAX])   //renewal removed this chance to break
 					rate += 10;
+#endif
 			}
 			if( rate )
 				skill->break_equip(src, EQP_WEAPON, rate, BCT_SELF);
@@ -3215,12 +3227,14 @@ static int skill_attack(int attack_type, struct block_list *src, struct block_li
 	 //Trick Dead protects you from damage, but not from buffs and the like, hence it's placed here.
 	if (sc && sc->data[SC_TRICKDEAD])
 		return 0;
+#ifndef RENEWAL
 	if ( skill_id != HW_GRAVITATION ) {
 		struct status_change *csc = status->get_sc(src);
 		if(csc && csc->data[SC_GRAVITATION] && csc->data[SC_GRAVITATION]->val3 == BCT_SELF )
 			return 0;
 	}
-
+#endif
+	//Gravitational field was reworked an now it's just a boring damage spell
 	dmg = battle->calc_attack(attack_type,src,bl,skill_id,skill_lv,flag&0xFFF);
 
 	//Skotlex: Adjusted to the new system
@@ -3583,9 +3597,11 @@ static int skill_attack(int attack_type, struct block_list *src, struct block_li
 		case HT_LANDMINE:
 			dmg.dmotion = clif->skill_damage(dsrc,bl,tick, dmg.amotion, dmg.dmotion, damage, dmg.div_, skill_id, -1, type);
 			break;
+#ifndef RENEWAL
 		case HW_GRAVITATION:
 			dmg.dmotion = clif->damage(bl, bl, 0, 0, damage, 1, BDT_ENDURE, 0);
 			break;
+#endif
 		case WZ_SIGHTBLASTER:
 			dmg.dmotion = clif->skill_damage(src,bl,tick, dmg.amotion, dmg.dmotion, damage, dmg.div_, skill_id, (flag&SD_LEVEL) ? -1 : skill_lv, BDT_SPLASH);
 			break;
@@ -12609,13 +12625,13 @@ static int skill_castend_pos2(struct block_list *src, int x, int y, uint16 skill
 				return 1;
 			}
 			break;
-
+#ifndef RENEWAL
 		case HW_GRAVITATION:
 			if ((sg = skill->unitsetting(src,skill_id,skill_lv,x,y,0)))
 				sc_start4(src, src, type, 100, skill_lv, 0, BCT_SELF, sg->group_id, skill->get_time(skill_id, skill_lv), skill_id);
 			flag|=1;
 			break;
-
+#endif
 		// Plant Cultivation [Celest]
 		case CR_CULTIVATION:
 			if (sd) {
@@ -13959,7 +13975,9 @@ static int skill_unit_onplace_timer(struct skill_unit *src, struct block_list *b
 		case HT_FREEZINGTRAP:
 		case HT_BLASTMINE:
 		case HT_CLAYMORETRAP:
+#ifndef RENEWAL
 		case HW_GRAVITATION:
+#endif
 		case SA_DELUGE:
 		case SA_VOLCANO:
 		case SA_VIOLENTGALE:
@@ -14889,7 +14907,9 @@ static int skill_unit_onleft(uint16 skill_id, struct block_list *bl, int64 tick)
 		case SA_DELUGE:
 		case SA_VIOLENTGALE:
 		case CG_HERMODE:
+#ifndef RENEWAL
 		case HW_GRAVITATION:
+#endif
 		case NJ_SUITON:
 		case SC_MAELSTROM:
 		case EL_WATER_BARRIER:
