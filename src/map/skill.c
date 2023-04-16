@@ -1124,10 +1124,7 @@ static sc_type skill_get_sc_type(int skill_id)
 static int skill_calc_heal(struct block_list *src, struct block_list *target, uint16 skill_id, uint16 skill_lv, bool heal)
 {
 	int skill2_lv, hp;
-	
-#ifdef RENEWAL
-	int hp_bonus = 0;
-#endif
+
 	struct map_session_data *sd = BL_CAST(BL_PC, src);
 	struct map_session_data *tsd = BL_CAST(BL_PC, target);
 	struct status_change* sc;
@@ -1138,14 +1135,12 @@ static int skill_calc_heal(struct block_list *src, struct block_list *target, ui
 		case SU_TUNABELLY:
 			hp = status_get_max_hp(target) * ((20 * skill_lv) - 10) / 100;
 			break;
+#ifndef RENEWAL //heal removed in Renewal, buffs incoming heal
 		case BA_APPLEIDUN:
-#ifdef RENEWAL
-			hp = 100+5*skill_lv+5*(status_get_vit(src)/10); // HP recovery
-#else // not RENEWAL
 			hp = 30+5*skill_lv+5*(status_get_vit(src)/10); // HP recovery
-#endif // RENEWAL
-			if( sd )
+				if( sd )
 				hp += 5*pc->checkskill(sd,BA_MUSICALLESSON);
+#endif
 			break;
 		case PR_SANCTUARY:
 			hp = (skill_lv>6)?777:skill_lv*100;
@@ -1209,7 +1204,9 @@ static int skill_calc_heal(struct block_list *src, struct block_list *target, ui
 			hp = 0;
 #ifdef RENEWAL
 		if(sc->data[SC_ASSUMPTIO])
-			hp_bonus += sc->data[SC_ASSUMPTIO]->val1 * 2;
+			hp += hp * (sc->data[SC_ASSUMPTIO]->val1 * 2) / 100;
+		if(sc->data[SC_APPLEIDUN])
+			hp += hp * (sc->data[SC_APPLEIDUN]->val3) / 100;
 #endif
 	}
 
@@ -1224,8 +1221,6 @@ static int skill_calc_heal(struct block_list *src, struct block_list *target, ui
 		default:
 			hp += status->get_matk(src, 3);
 	}
-	if (hp_bonus)
-		hp += hp * hp_bonus / 100;
 #endif // RENEWAL
 	return hp;
 }
@@ -5003,16 +4998,40 @@ static int skill_castend_damage_id(struct block_list *src, struct block_list *bl
 
 		case RG_BACKSTAP:
 			{
-				enum unit_dir dir = map->calc_dir(src, bl->x, bl->y);
-				enum unit_dir t_dir = unit->getdir(bl);
-				if ((!check_distance_bl(src, bl, 0) && map->check_dir(dir, t_dir) == 0) || bl->type == BL_SKILL) {
+				if (!check_distance_bl(src, bl, 0)) {
+#ifdef RENEWAL ///renewal skill rework, code from it from rathena
+					enum unit_dir dir = map->calc_dir(src, bl->x, bl->y);
+					short x, y;
+					if (dir > 0 && dir < 4)
+						x = -1;
+					else if (dir > 4)
+						x = 1;
+					else
+						x = 0;
+					if (dir > 2 && dir < 6)
+						y = -1;
+					else if (dir == 7 || dir < 2)
+						y = 1;
+					else
+						y = 0;
+					if (battle->check_target(src, bl, BCT_ENEMY) > 0 && unit->move_pos(src, bl->x + x, bl->y + y, 2, true) { // Display movement + animation.
+#else
+					enum unit_dir dir = map->calc_dir(src, bl->x, bl->y);
+					enum unit_dir t_dir = unit->getdir(bl);
+					if (map->check_dir(dir, t_dir) == 0) || bl->type == BL_SKILL) {
+#endif
 					status_change_end(src, SC_HIDING, INVALID_TIMER);
-					skill->attack(BF_WEAPON, src, src, bl, skill_id, skill_lv, tick, flag);
 					dir = unit_get_opposite_dir(dir); // change direction [Celest]
 					unit->set_dir(bl, dir);
+#ifdef RENEWAL
+					clif->slide(src, x, y);
+					unit->move_pos(src, x, y, 1, false);
+#endif
+					skill->attack(BF_WEAPON, src, src, bl, skill_id, skill_lv, tick, flag);
+					}
+					else if (sd)
+						clif->skill_fail(sd, skill_id, USESKILL_FAIL_LEVEL, 0, 0);
 				}
-				else if (sd)
-					clif->skill_fail(sd, skill_id, USESKILL_FAIL_LEVEL, 0, 0);
 			}
 			break;
 
@@ -5294,7 +5313,7 @@ static int skill_castend_damage_id(struct block_list *src, struct block_list *bl
 			else
 				skill->attack(skill->get_type(skill_id, skill_lv), src, src, bl, skill_id, skill_lv, tick, flag);
 			break;
-
+#ifndef RENEWAL ///renewal removed this crazy stuff of blowling bash, like it's a regular splash skill
 		case KN_BOWLINGBASH:
 		case MS_BOWLINGBASH:
 			{
@@ -5372,7 +5391,7 @@ static int skill_castend_damage_id(struct block_list *src, struct block_list *bl
 				skill->attack(BF_WEAPON,src,src,bl,skill_id,skill_lv,tick,(flag&0xFFF)>0?SD_ANIMATION:0);
 			}
 			break;
-
+#endif
 		case KN_SPEARSTAB:
 			if(flag&1) {
 				if (bl->id==skill->area_temp[1])
@@ -13290,12 +13309,17 @@ static struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16
 			val1 = 10; //FIXME: This value is not used anywhere, what is it for? [Skotlex]
 			break;
 		case BA_WHISTLE:
+#ifdef RENEWAL
+			val1 = 18 + skill_lv*2; // Flee increase
+			val2 = (skill_lv + 1) / 2; // Perfect dodge increase
+#else
 			val1 = skill_lv +st->agi/10; // Flee increase
 			val2 = ((skill_lv+1)/2)+st->luk/10; // Perfect dodge increase
 			if(sd){
 				val1 += pc->checkskill(sd,BA_MUSICALLESSON);
 				val2 += pc->checkskill(sd,BA_MUSICALLESSON);
 			}
+#endif
 			break;
 		case DC_HUMMING:
 			val1 = 2*skill_lv+st->dex/10; // Hit increase
@@ -13306,6 +13330,10 @@ static struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16
 				val1 += pc->checkskill(sd,DC_DANCINGLESSON);
 			break;
 		case BA_POEMBRAGI:
+#ifdef RENEWAL
+			val1 = 2 * skill_lv; // Casting time reduction
+			val2 = 3 * skill_lv; // After-cast delay reduction
+#else
 			val1 = 3*skill_lv+st->dex/10; // Casting time reduction
 			//For some reason at level 10 the base delay reduction is 50%.
 			val2 = (skill_lv<10?3*skill_lv:50)+st->int_/5; // After-cast delay reduction
@@ -13313,6 +13341,7 @@ static struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16
 				val1 += 2*pc->checkskill(sd,BA_MUSICALLESSON);
 				val2 += 2*pc->checkskill(sd,BA_MUSICALLESSON);
 			}
+#endif
 			break;
 		case DC_DONTFORGETME:
 #ifdef RENEWAL
@@ -13321,24 +13350,34 @@ static struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16
 #else
 			val1 = st->dex/10 + 3*skill_lv + 5; // ASPD decrease
 			val2 = st->agi/10 + 3*skill_lv + 5; // Movement speed adjustment.
-#endif
 			if(sd){
 				val1 += pc->checkskill(sd,DC_DANCINGLESSON);
 				val2 += pc->checkskill(sd,DC_DANCINGLESSON);
 			}
+#endif
 			break;
 		case BA_APPLEIDUN:
-			val1 = 5+2*skill_lv+st->vit/10; // MaxHP percent increase
+#ifdef RENEWAL
+			val2 = 9 + skill_lv + skill_lv/5; // MaxHP percent increase
+			val3 = skill_lv * 2; //heal buff
+#else
+			val2 = 5+2*skill_lv+st->vit/10; // MaxHP percent increase
 			if(sd)
-				val1 += pc->checkskill(sd,BA_MUSICALLESSON);
+				val2 += pc->checkskill(sd,BA_MUSICALLESSON);
+#endif
 			break;
 		case DC_SERVICEFORYOU:
+#ifdef RENEWAL
+			val1 = 9+skill_lv+(st->int_/10)*2; // MaxSP percent increase
+			val2 = 5*skill_lv; // SP cost reduction
+#else
 			val1 = 15+skill_lv+(st->int_/10); // MaxSP percent increase
 			val2 = 20+3*skill_lv+(st->int_/10); // SP cost reduction
 			if(sd){
 				val1 += pc->checkskill(sd,DC_DANCINGLESSON) / 2;
 				val2 += pc->checkskill(sd,DC_DANCINGLESSON) / 2;
 			}
+#endif
 			break;
 		case BA_ASSASSINCROSS:
 			if(sd)
@@ -13354,10 +13393,14 @@ static struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16
 #endif
 			break;
 		case DC_FORTUNEKISS:
+#ifdef RENEWAL
+			val1 = skill_lv; // Critical increase
+			val1 *= 10;
+#else
 			val1 = 10+skill_lv+(st->luk/10); // Critical increase
 			if(sd)
 				val1 += pc->checkskill(sd,DC_DANCINGLESSON);
-			val1*=10; //Because every 10 crit is an actual cri point.
+#endif
 			break;
 		case BD_DRUMBATTLEFIELD:
 		#ifdef RENEWAL

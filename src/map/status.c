@@ -1954,7 +1954,12 @@ static int status_calc_pc_(struct map_session_data *sd, enum e_status_calc_opt o
 		bstatus->max_sp += 30 * skill_lv;
 	if ((pc->checkskill(sd,SU_SPRITEMABLE)) > 0)
 		bstatus->max_sp += 100;
-
+#ifdef RENEWAL
+	if((skill_lv = pc->checkskill(sd,BA_MUSICALLESSON)) > 0)
+		bstatus->max_sp += (int64)bstatus->max_sp * skill_lv/100;
+	if((skill_lv = pc->checkskill(sd,DC_DANCINGLESSON)) > 0)
+		bstatus->max_sp += (int64)bstatus->max_sp * skill_lv/100;
+#endif
 	// Apply relative modifiers from equipment
 	if(sd->sprate < 0)
 		sd->sprate = 0;
@@ -2010,9 +2015,10 @@ static int status_calc_pc_(struct map_session_data *sd, enum e_status_calc_opt o
 		sd->critical_rate = 0;
 	if(sd->critical_rate != 100)
 		bstatus->cri = bstatus->cri * sd->critical_rate/100;
+	
 	if (pc->checkskill(sd, SU_POWEROFLIFE) > 0)
 		bstatus->cri += 20;
-
+	
 	if(sd->flee2_rate < 0)
 		sd->flee2_rate = 0;
 	if(sd->flee2_rate != 100)
@@ -2056,6 +2062,17 @@ static int status_calc_pc_(struct map_session_data *sd, enum e_status_calc_opt o
 		bstatus->flee += (skill_lv*3)>>1;
 	if (pc->checkskill(sd, SU_POWEROFLIFE) > 0)
 		bstatus->flee += 20;
+	
+	// ----- CRITICAL CALCULATION -----	
+#ifdef RENEWAL
+	if((skill_lv=pc->checkskill(sd,DC_DANCINGLESSON)) > 0)
+		bstatus->cri += skill_lv * 10;
+	if((skill_lv=pc->checkskill(sd,PR_MACEMASTERY)) > 0 && (sd->weapontype == W_MACE || sd->weapontype == W_2HMACE))
+		bstatus->cri += skill_lv * 10;
+#endif
+	
+	
+	
 	// ----- EQUIPMENT-DEF CALCULATION -----
 
 	// Apply relative modifiers from equipment
@@ -5438,6 +5455,8 @@ static short status_calc_aspd(struct block_list *bl, struct status_change *sc, s
 			bonus += sc->data[SC_ADRENALINE]->val4;
 		if(sc->data[SC_SPEARQUICKEN])
 			bonus += sc->data[SC_SPEARQUICKEN]->val3;
+		if((skill_lv = pc->checkskill(sd,BA_MUSICALLESSON)) > 0)
+			bonus += skill_lv;
 	#endif	
  	}
 	return (bonus + pots);
@@ -11969,7 +11988,9 @@ static int status_change_timer(int tid, int64 tick, int id, intptr_t data)
 				case BD_DRUMBATTLEFIELD:
 				case BD_RINGNIBELUNGEN:
 				case BD_SIEGFRIED:
+#ifndef RENEWAL
 				case BA_DISSONANCE:
+#endif
 				case BA_ASSASSINCROSS:
 				case DC_UGLYDANCE:
 					s=3;

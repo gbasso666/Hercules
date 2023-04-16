@@ -776,9 +776,6 @@ static int64 battle_addmastery(struct map_session_data *sd, struct block_list *t
 		case W_2HMACE:
 			if((skill_lv = pc->checkskill(sd,PR_MACEMASTERY)) > 0)
 				damage += (skill_lv * 3);
-#ifdef Renewal
-				sstatus->cri += skill_lv; //not sure if it will work, rathena adds this bonus in Status.cpp, but here seems more elegant.
-#endif
 			if((skill_lv = pc->checkskill(sd,NC_TRAININGAXE)) > 0)
 				damage += (skill_lv * 5);
 			break;
@@ -1708,6 +1705,12 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					skillratio += -100 + 100 * skill_lv;
 					RE_LVL_DMOD(100);
 					break;
+				case BA_DISSONANCE:
+						skillratio += skill_lv * 10;
+							if (sd)
+							skillratio += 3 * pc_checkskill(sd, BA_MUSICALLESSON);
+					
+					break;
 #endif	
 				case HW_NAPALMVULCAN:
 					skillratio += 70 * skill_lv - 100;
@@ -2340,27 +2343,33 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 						skillratio += 20 * pc->checkskill(sd,AS_POISONREACT);
 #endif
 					break;
-	#ifndef RENEWAL
+#ifndef RENEWAL
 				case ASC_BREAKER:
 					skillratio += 100*skill_lv-100;
-	#else
+#else
 				case LK_SPIRALPIERCE:
 				case ML_SPIRALPIERCE:
 					skillratio += 50 + 50 * skill_lv;
 					RE_LVL_DMOD(100);
-	#endif
+#endif
 					break;
 				case PA_SACRIFICE:
 					skillratio += 10 * skill_lv - 10;
 					break;
 				case PA_SHIELDCHAIN:
-	#ifdef RENEWAL
+#ifdef RENEWAL
 					skillratio += 200 + 200 * skill_lv;
 					RE_LVL_DMOD(100);
-	#else
+#else
 					skillratio += 30 * skill_lv;
-	#endif
+#endif
 					break;
+#ifdef RENEWAL					
+				case PA_PRESSURE:
+						skillratio += +400 + 150 * skill_lv;
+						RE_LVL_DMOD(100);
+					break;
+#endif
 				case WS_CARTTERMINATION:
 					i = 10 * (16 - skill_lv);
 					if (i < 1) i = 1;
@@ -3092,7 +3101,9 @@ static int64 battle_calc_damage(struct block_list *src, struct block_list *bl, s
 		return 1;
 
 	switch(skill_id) {
+#ifndef RENEWAL
 	case PA_PRESSURE:
+#endif
 	case SP_SOULEXPLOSION:
 		return damage; //This skill bypass everything else.
 	}
@@ -4353,11 +4364,16 @@ static struct Damage battle_calc_misc_attack(struct block_list *src, struct bloc
 	case TF_THROWSTONE:
 		md.damage=50;
 		break;
+#ifndef RENEWAL  //This skills no longer do flat damage on renewal
 	case BA_DISSONANCE:
 		md.damage=30+skill_lv*10;
 		if (sd)
 			md.damage+= 3*pc->checkskill(sd,BA_MUSICALLESSON);
 		break;
+	case PA_PRESSURE:
+		md.damage=500+300*skill_lv;
+		break;
+#endif
 	case NPC_SELFDESTRUCTION:
 		md.damage = sstatus->hp;
 		break;
@@ -4367,14 +4383,6 @@ static struct Damage battle_calc_misc_attack(struct block_list *src, struct bloc
 	case NPC_DARKBREATH:
 		md.damage = 500 + (skill_lv-1)*1000 + rnd()%1000;
 		if(md.damage > 9999) md.damage = 9999;
-		break;
-	case PA_PRESSURE:
-#ifdef RENEWAL
-		skillratio += +400 + 150 * skill_lv;
-		RE_LVL_DMOD(100);
-#else
-		md.damage=500+300*skill_lv;
-#endif
 		break;
 	case PA_GOSPEL:
 		md.damage = 1+rnd()%9999;
@@ -4827,13 +4835,28 @@ static struct Damage battle_calc_weapon_attack(struct block_list *src, struct bl
 
 			case GS_GROUNDDRIFT:
 			case KN_SPEARSTAB:
+#ifndef RENEWAL
 			case KN_BOWLINGBASH:
+#endif			
 			case MS_BOWLINGBASH:
 			case MO_BALKYOUNG:
 			case TK_TURNKICK:
 				wd.blewcount=0;
 				break;
-
+#ifdef RENEWAL
+			case KN_BOWLINGBASH:
+				if (sd != NULL && sd->weapontype == W_2HSWORD) { //2handed swords deal more hits damage if there are more than 2 enemies in area
+					if (wflag >= 2 && wflag <= 3)
+						wd.div_ = 3;
+					else if (wflag >= 4)
+						wd.div_ = 4;
+				}
+				break;
+			case RG_BACKSTAP:
+				if (sd != NULL && sd->weapontype == W_DAGGER)
+					wd.div_ = 2;
+				break;
+#endif
 			case KN_AUTOCOUNTER:
 				wd.flag=(wd.flag&~BF_SKILLMASK)|BF_NORMAL;
 				break;
@@ -5205,6 +5228,11 @@ static struct Damage battle_calc_weapon_attack(struct block_list *src, struct bl
 			case LG_BANISHINGPOINT:
 				hitrate += 3 * skill_lv;
 				break;
+#ifdef RENEWAL
+			case RG_BACKSTAP:
+				hitrate += skill_lv * 4; //Renewal buff: added hitrate on Back Stab
+				break;
+#endif
 			case RL_SLUGSHOT:
 				{
 					int dist = distance_bl(src, target);
