@@ -88,9 +88,9 @@
 ///  - it does NOT affect grimtooth
 ///  - weapon and status ATK are increased
 ///  - some skill's damage ratio has modified
-///#define RENEWAL_EDP
+#define RENEWAL_EDP
 
-renewal ASPD [malufett]
+//renewal ASPD [malufett]
 ///
 /// leave this line to enable renewal ASPD
 /// - shield penalty is applied
