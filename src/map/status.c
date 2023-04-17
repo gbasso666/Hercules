@@ -2383,7 +2383,12 @@ static int status_calc_pc_(struct map_session_data *sd, enum e_status_calc_opt o
 			sd->right_weapon.addrace[RC_DEMON] += sc->data[SC_PHI_DEMON]->val1;
 			sd->left_weapon.addrace[RC_DEMON] += sc->data[SC_PHI_DEMON]->val1;
 		}
+#ifdef RENEWAL
+		if (sc->data[SC_FORTUNE])
+			sd->bonus.crit_atk_rate += sc->data[SC_FORTUNE]->val1 * 2 / 10;
+#endif
 	}
+	
 	status->copy(&sd->battle_status, bstatus);
 
 	// ----- CLIENT-SIDE REFRESH -----

@@ -13322,12 +13322,13 @@ static struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16
 #endif
 			break;
 		case DC_HUMMING:
+#ifdef RENEWAL
+			val1 = 4*skill_lv;
+#else
 			val1 = 2*skill_lv+st->dex/10; // Hit increase
-			#ifdef RENEWAL
-				val1 *= 2;
-			#endif
-			if(sd)
+				if(sd)
 				val1 += pc->checkskill(sd,DC_DANCINGLESSON);
+#endif
 			break;
 		case BA_POEMBRAGI:
 #ifdef RENEWAL
@@ -13400,12 +13401,13 @@ static struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16
 			val1 = 10+skill_lv+(st->luk/10); // Critical increase
 			if(sd)
 				val1 += pc->checkskill(sd,DC_DANCINGLESSON);
+				val1 *= 10;
 #endif
 			break;
 		case BD_DRUMBATTLEFIELD:
 		#ifdef RENEWAL
-			val1 = (skill_lv+5)*25; //Watk increase
-			val2 = skill_lv*10; //Def increase
+			val1 = 15 + (skill_lv*5); //Watk increase
+			val2 = skill_lv*15; //Def increase
 		#else
 			val1 = (skill_lv+1)*25; //Watk increase
 			val2 = (skill_lv+1)*2; //Def increase
@@ -13415,11 +13417,20 @@ static struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16
 			val1 = (skill_lv+2)*25; //Watk increase
 			break;
 		case BD_RICHMANKIM:
+#ifdef RENEWAL
+			val1 = 10 + 10*skill_lv; //Exp increase bonus.
+#else
 			val1 = 25 + 11*skill_lv; //Exp increase bonus.
+#endif
 			break;
 		case BD_SIEGFRIED:
+#ifdef RENEWAL
+			val1 = skill_lv*3; //Elemental Resistance renewal reword
+			val2 = skill_lv*5; //Status ailment resistance renewal rework
+#else
 			val1 = 55 + skill_lv*5; //Elemental Resistance
 			val2 = skill_lv*10; //Status ailment resistance
+#endif
 			break;
 		case WE_CALLPARTNER:
 			if (sd) val1 = sd->status.partner_id;
