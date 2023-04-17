@@ -44,6 +44,7 @@
 #include "common/conf.h"
 #include "common/ers.h"
 #include "common/memmgr.h"
+#include "common/extraconf.h"
 #include "common/nullpo.h"
 #include "common/random.h"
 #include "common/showmsg.h"
