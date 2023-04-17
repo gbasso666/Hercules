@@ -1698,7 +1698,7 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					skillratio += 100;
 					break;
 				case PR_MAGNUS:
-					if (battle_check_undead(tstatus->race, tstatus->def_ele) || tstatus->race == RC_DEMON)
+					if(battle->check_undead(tst->race,tst->def_ele) || tst->race==RC_DEMON)
 					skillratio += 30;
 					break;	
 				case HW_GRAVITATION:
@@ -1707,9 +1707,8 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					break;
 				case BA_DISSONANCE:
 						skillratio += skill_lv * 10;
-							if (sd)
-							skillratio += 3 * pc_checkskill(sd, BA_MUSICALLESSON);
-					
+							if((skill_lv = pc->checkskill(sd,BA_MUSICALLESSON)) > 0)
+							skillratio += (skill_lv * 3);	
 					break;
 #endif	
 				case HW_NAPALMVULCAN:
@@ -2097,7 +2096,7 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					break;
 #ifdef RENEWAL
 				case KN_BRANDISHSPEAR:
-					skillratio += -100 + 400 + 100 * skill_lv + sstatus->str * 5; //rathena is using * 3 here, but IRO and other sites say it's str*5.
+					skillratio += -100 + 400 + 100 * skill_lv + st->str * 5; //rathena is using * 3 here, but IRO and other sites say it's str*5.
 					break;
 #else
 				case KN_BRANDISHSPEAR:
@@ -2126,6 +2125,9 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 					break;				
 				case AS_SONICBLOW:
 #ifdef RENEWAL
+
+					struct status_data *tstatus;
+					tstatus = status->get_status_data(target);
 					skillratio += 100 + 100 * skill_lv;
 					if (tstatus->hp < (tstatus->max_hp / 2))
 					skillratio += skillratio / 2;
@@ -2232,7 +2234,7 @@ static int battle_calc_skillratio(int attack_type, struct block_list *src, struc
 #endif
 					break;
 				case MO_INVESTIGATE:
-#ifdef
+#ifdef RENEWAL
 					skillratio += -100 + 100 * skill_lv; ///TODO: +50% on targets under Root skill
 #else
 					skillratio += 75 * skill_lv;

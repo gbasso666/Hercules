@@ -4703,11 +4703,11 @@ static int status_calc_hit(struct block_list *bl, struct status_change *sc, int 
 		hit += sc->data[SC_SOULFALCON]->val3;
 #ifdef RENEWAL
 	if(sc->data[SC_BLESSING])
-		hit += sc->data[SC_BLESSING]->val2 * 2;
+		hit += sc->data[SC_BLESSING]->val2 * 2; //hit increase, renewal only
 	if(sc->data[SC_TWOHANDQUICKEN])
-		hit += sc->data[SC_TWOHANDQUICKEN]->val5;
+		hit += sc->data[SC_TWOHANDQUICKEN]->val1 * 2; ///Hit bonus, used in renewal only
 	if(sc->data[SC_ADRENALINE])
-		hit += sc->data[SC_ADRENALINE]->val5;
+		hit += sc->data[SC_ADRENALINE]->val1 * 3 + 5; //hit increase, renewal only
 #endif
 
 	return cap_value(hit, battle_config.hit_min, battle_config.hit_max);
@@ -7655,8 +7655,7 @@ static int status_change_start_sub(struct block_list *src, struct block_list *bl
 			case SC_TWOHANDQUICKEN:
 				val2 = 300; //"flat" aspd bonus
 				val3 = 10; //%aspd bonus, used in Renewal only
-				val4 = va11 + 2; //%Crit rate bonus, used in Renewal only, it is x10 in calc
-				val5 = val1 * 2; //Hit bonus, used in renewal only
+				val4 = val1 + 2; //%Crit rate bonus, used in Renewal only, it is x10 in calc
 				if (val1 > 10) //For boss casted skills [Skotlex]
 					val2 += 20*(val1-10);
 				break;
@@ -8146,7 +8145,6 @@ static int status_change_start_sub(struct block_list *src, struct block_list *bl
 			case SC_ADRENALINE:
 				val3 = (val2) ? 300 : 200; // aspd increase
 				val4 = 10; //%aspd increase, used in renewal only
-				val5 = 5 + 3 * val1; //hit increase, renewal only
 				FALLTHROUGH
 			case SC_WEAPONPERFECT:
 				if(sd && pc->checkskill(sd,BS_HILTBINDING)>0)

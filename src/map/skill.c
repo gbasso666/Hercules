@@ -5014,7 +5014,7 @@ static int skill_castend_damage_id(struct block_list *src, struct block_list *bl
 						y = 1;
 					else
 						y = 0;
-					if (battle->check_target(src, bl, BCT_ENEMY) > 0 && unit->move_pos(src, bl->x + x, bl->y + y, 2, true) { // Display movement + animation.
+					if (battle->check_target(src, bl, BCT_ENEMY) > 0 && unit->move_pos(src, bl->x + x, bl->y + y, 2, true)) { // Display movement + animation.
 #else
 					enum unit_dir dir = map->calc_dir(src, bl->x, bl->y);
 					enum unit_dir t_dir = unit->getdir(bl);
@@ -17275,9 +17275,10 @@ static int skill_castfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv
 /*==========================================
  * Does cast-time reductions based on sc data.
  *------------------------------------------*/
-#ifndef RENEWAL_CAST ///Looks like this section only applies to pre-re cast. Looking at rathena code indicates the same
+
 static int skill_castfix_sc(struct block_list *bl, int time)
 {
+#ifndef RENEWAL_CAST ///seems like this is only used for pre-renewal cast, there fore it's better to keep it separated.
 	struct status_change *sc = status->get_sc(bl);
 
 	if( time < 0 )
@@ -17310,11 +17311,13 @@ static int skill_castfix_sc(struct block_list *bl, int time)
 	time = max(time, 0);
 
 	//ShowInfo("Castime castfix_sc = %d\n",time);
+#endif
 	return time;
 }
-#else 
+
 static int skill_vfcastfix(struct block_list *bl, double time, uint16 skill_id, uint16 skill_lv)
 {
+#ifdef RENEWAL_CAST
 	struct status_change *sc = status->get_sc(bl);
 	struct map_session_data *sd = BL_CAST(BL_PC,bl);
 	int fixed = skill->get_fixed_cast(skill_id, skill_lv), fixcast_r = 0, varcast_r = 0, i = 0;
