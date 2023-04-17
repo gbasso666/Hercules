@@ -102,10 +102,10 @@
 					next;
 					switch(select("Book of Mother Earth", "Book of Billows", "Book of Gust of Wind", "Book of the Blazing Sun"))
 					{
-						case 1: callfunc "Func_Socket2",1554,1569,40,66,200,1010,10;
-						case 2: callfunc "Func_Socket2",1553,1568,40,66,200,1010,10;
-						case 3: callfunc "Func_Socket2",1556,1571,40,66,200,1010,10;
-						case 4: callfunc "Func_Socket2",1555,1570,40,66,200,1010,10;
+						case 1: callfunc "Func_Socket2",1554,1569,0,101,200,1010,10;
+						case 2: callfunc "Func_Socket2",1553,1568,0,101,200,1010,10;
+						case 3: callfunc "Func_Socket2",1556,1571,0,101,200,1010,10;
+						case 4: callfunc "Func_Socket2",1555,1570,0,101,200,1010,10;
 					}
 				case 2:
 					mes "[Leablem]";
@@ -114,9 +114,9 @@
 					next;
 					switch(select("Orcish Axe", "Scimiter", "Spike"))
 					{
-						case 1: callfunc "Func_Socket2",1304,1309,40,66,200,984,1;
-						case 2: callfunc "Func_Socket2",1113,1114,40,66,200,984,1;
-						case 3: callfunc "Func_Socket2",1523,1538,40,61,300,984,1;
+						case 1: callfunc "Func_Socket2",1304,1309,0,101,200,984,1;
+						case 2: callfunc "Func_Socket2",1113,1114,0,101,200,984,1;
+						case 3: callfunc "Func_Socket2",1523,1538,0,101,300,984,1;
 					}
 				case 3:
 					mes "[Leablem]";
@@ -125,17 +125,17 @@
 					next;
 					switch(select("Dragon Killer", "Katar of Quaking", "Katar of Raging Blaze", "Katar of Frozen Icicle", "Katar of Piercing Wind", "Golden Mace", "Oriental Lute", "Queen's Whip", "Spectral Spear", "Gae Bolg", "Schweizersabel"))
 					{
-						case 1:  callfunc "Func_Socket2",13001,13030,40,61,500,984,2;
-						case 2:  callfunc "Func_Socket2", 1257, 1276,40,66,500,984,2;
-						case 3:  callfunc "Func_Socket2", 1258, 1277,40,66,500,984,2;
-						case 4:  callfunc "Func_Socket2", 1256, 1275,40,66,500,984,2;
-						case 5:  callfunc "Func_Socket2", 1259, 1278,40,66,500,984,2;
-						case 6:  callfunc "Func_Socket2", 1524, 1539,40,61,500,984,2;
-						case 7:  callfunc "Func_Socket2", 1918, 1922,40,61,500,984,2;
-						case 8:  callfunc "Func_Socket2", 1970, 1976,40,61,500,984,2;
-						case 9:  callfunc "Func_Socket2", 1477, 1479,40,56,500,984,2;
-						case 10: callfunc "Func_Socket2", 1474, 1480,40,56,500,984,2;
-						case 11: callfunc "Func_Socket2", 1167, 1178,40,61,500,984,2;
+						case 1:  callfunc "Func_Socket2",13001,13030,0,101,500,984,2;
+						case 2:  callfunc "Func_Socket2", 1257, 1276,0,101,500,984,2;
+						case 3:  callfunc "Func_Socket2", 1258, 1277,0,101,500,984,2;
+						case 4:  callfunc "Func_Socket2", 1256, 1275,0,101,500,984,2;
+						case 5:  callfunc "Func_Socket2", 1259, 1278,0,101,500,984,2;
+						case 6:  callfunc "Func_Socket2", 1524, 1539,0,101,500,984,2;
+						case 7:  callfunc "Func_Socket2", 1918, 1922,0,101,500,984,2;
+						case 8:  callfunc "Func_Socket2", 1970, 1976,0,101,500,984,2;
+						case 9:  callfunc "Func_Socket2", 1477, 1479,0,101,500,984,2;
+						case 10: callfunc "Func_Socket2", 1474, 1480,0,101,500,984,2;
+						case 11: callfunc "Func_Socket2", 1167, 1178,0,101,500,984,2;
 					}
 				case 4:
 					mes "[Leablem]";
@@ -144,13 +144,13 @@
 					next;
 					switch(select("Zephyrus", "Mailbreaker", "Dragon Slayer", "Swordbreaker", "Assasin Dagger", "Grand Cross", "Executioner"))
 					{
-						case 1: callfunc "Func_Socket2",1468, 1481,40,51,1000,984,5,999,10;
-						case 2: callfunc "Func_Socket2",1225,13032,40,51,1000,984,5,999,10;
-						case 3: callfunc "Func_Socket2",1166, 1180,40,51,1000,984,5,999,10;
-						case 4: callfunc "Func_Socket2",1224,13031,40,51,1000,984,5,999,10;
-						case 5: callfunc "Func_Socket2",1232,13033,40,51,1000,984,5,999,10;
-						case 6: callfunc "Func_Socket2",1528, 1540,40,51,1000,984,5,999,10;
-						case 7: callfunc "Func_Socket2",1169, 1179,40,51,1000,984,5,999,10;
+						case 1: callfunc "Func_Socket2",1468, 1481,0,101,1000,984,5,999,10;
+						case 2: callfunc "Func_Socket2",1225,13032,0,101,1000,984,5,999,10;
+						case 3: callfunc "Func_Socket2",1166, 1180,0,101,1000,984,5,999,10;
+						case 4: callfunc "Func_Socket2",1224,13031,0,101,1000,984,5,999,10;
+						case 5: callfunc "Func_Socket2",1232,13033,0,101,1000,984,5,999,10;
+						case 6: callfunc "Func_Socket2",1528, 1540,0,101,1000,984,5,999,10;
+						case 7: callfunc "Func_Socket2",1169, 1179,0,101,1000,984,5,999,10;
 					}
 			}
 		case 2:
@@ -170,10 +170,10 @@
 					next;
 					switch(select("Sunflower", "Ph.D Hat", "Big Ribbon", "Boys Cap"))
 					{
-						case 1: callfunc "Func_Socket2",2253,5351,40,66,100,999,3;
-						case 2: callfunc "Func_Socket2",5012,5347,40,66,100,999,3;
-						case 3: callfunc "Func_Socket2",2244,5348,40,66,100,999,5;
-						case 4: callfunc "Func_Socket2",5016,5349,40,66,100,999,5;
+						case 1: callfunc "Func_Socket2",2253,5351,0,101,100,999,3;
+						case 2: callfunc "Func_Socket2",5012,5347,0,101,100,999,3;
+						case 3: callfunc "Func_Socket2",2244,5348,0,101,100,999,5;
+						case 4: callfunc "Func_Socket2",5016,5349,0,101,100,999,5;
 					}
 				case 2:
 					mes "[Leablem]";
@@ -182,8 +182,8 @@
 					next;
 					switch(select("Skull Ring", "High Heels"))
 					{
-						case 1: callfunc "Func_Socket2",2609,2715,40,61,300,999,5;
-						case 2: callfunc "Func_Socket2",2409,2432,40,61,300,999,5;
+						case 1: callfunc "Func_Socket2",2609,2715,0,101,300,999,5;
+						case 2: callfunc "Func_Socket2",2409,2432,0,101,300,999,5;
 					}
 				case 3:
 					mes "[Leablem]";
@@ -191,9 +191,9 @@
 					mes "So, what kind of armor do you have?";
 					next;
 					switch (select("Pirate Bandana", "Black Leather Boots", (RENEWAL?"Special Ninja Suit": ""))) {
-						case 1: callfunc "Func_Socket2",2287,5350,50,61,500,985,1; // 50,61 - it's not a typo
-						case 2: callfunc "Func_Socket2",2425,2434,40,51,500,985,1;
-						case 3: callfunc "Func_Socket2",15053,15056,50,61,500,985,1;
+						case 1: callfunc "Func_Socket2",2287,5350,0,101,500,985,1; // 50,61 - it's not a typo
+						case 2: callfunc "Func_Socket2",2425,2434,0,101,500,985,1;
+						case 3: callfunc "Func_Socket2",15053,15056,0,101,500,985,1;
 					}
 				case 4:
 					mes "[Leablem]";
@@ -202,11 +202,11 @@
 					next;
 					switch(select("Mage Coat", "Holy Robe", "Sacred Mission", "Undershirt", "Pantie"))
 					{
-						case 1: callfunc "Func_Socket2",2334,2372,40,51,1000,985,1; // Mage Coat has 10% success chance
-						case 2: callfunc "Func_Socket2",2327,2373,45,51,1000,985,1; // the rest has 5%
-						case 3: callfunc "Func_Socket2",2111,2128,45,51,1000,985,1;
-						case 4: callfunc "Func_Socket2",2522,2523,45,51,1000,985,1;
-						case 5: callfunc "Func_Socket2",2339,2371,45,51,1000,985,1;
+						case 1: callfunc "Func_Socket2",2334,2372,0,101,1000,985,1; // Mage Coat has 10% success chance
+						case 2: callfunc "Func_Socket2",2327,2373,0,101,1000,985,1; // the rest has 5%
+						case 3: callfunc "Func_Socket2",2111,2128,0,101,1000,985,1;
+						case 4: callfunc "Func_Socket2",2522,2523,0,101,1000,985,1;
+						case 5: callfunc "Func_Socket2",2339,2371,0,101,1000,985,1;
 					}
 			}
 		case 3:

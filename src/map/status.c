@@ -3770,7 +3770,7 @@ static int status_base_matk(struct block_list *bl, const struct status_data *st,
 		case BL_ITEM:
 		case BL_ALL:
 		default: // temporary until all are formulated
-			matk = st->int_ + (st->int_ / 2) + (st->dex / 5) + (st->luk / 3) + (level / 4);
+			matk = st->int_ + st->int_ + (st->dex / 5) + (st->luk / 3) + (level / 4);
 			break;
 	}
 	return cap_value(matk, battle_config.matk_min, battle_config.matk_max);

@@ -171,7 +171,7 @@ hu_in01,386,373,4	script	Hunter Guildsman#hnt	4_F_JOB_HUNTER,{
 			mes "You look great as a Hunter!!";
 			.@joblvl = JobLevel;
 			completequest 4013;
-			callfunc "Job_Change",Job_Hunter;
+			callfunc "Job_Change",Job_Sniper;
 			callfunc "F_ClearJobVar";		// clears all job variables for the current player
 			next;
 			mes "[Hunter Sherin]";

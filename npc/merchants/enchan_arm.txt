@@ -55,16 +55,16 @@ prontera,165,60,2	script	Apprentice Craftsman	1_F_MERCHANT_01,{
 		switch(select("Non Slotted Armor.", "Slotted Armor.", "High Grade Armor.", "Maybe next time.")) {
 		case 1:
 			setarray .@items[0],2307,2309,2314,2316,2321,2325,2327,2328,2330,2332,2334,2335,2341,2344,2346,2348,2350,2337,2386,2394,2395,2396;
-			.@j = 50;
+			.@j = 6;
 			break;
 		case 2:
 			setarray .@items[0],2311,2318,2319,2320,2308,2310,2315,2317,2322,2324,2326,2331,2333,2336,2342,2345,2347,2349,2351;
-			.@j = 55;
+			.@j = 6;
 			.@k = 1;
 			break;
 		case 3:
 			setarray .@items[0],2364,2365,2391,2374,2375,2376,2377,2378,2379,2380,2381,2382,2387,2388,2389,2390;
-			.@j = 60;
+			.@j = 6;
 			break;
 		case 4:
 			mes "[Apprentice Craftsman]";
@@ -112,7 +112,7 @@ S_EnchantArmor:
 			close;
 		}
 		progressbar "ffff00",7;
-		Zeny -= 400000;
+		Zeny -= 40000;
 		delitem .@itemid,1;
 		switch (rand(1,.@failrate)) {
 			case 1: .@addpart = 4702;break;

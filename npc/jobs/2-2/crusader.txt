@@ -302,7 +302,7 @@ prt_castle,45,169,5	script	Senior Crusader	4_M_CRU_OLD,{
 		next;
 		.@Joblevel = JobLevel;
 		completequest 3015;
-		callfunc "Job_Change",Job_Crusader;
+		callfunc "Job_Change",Job_Paladin;
 		callfunc "F_ClearJobVar";		//clears all job variables for the current player
 		mes "[Michael Halig]";
 		mes "Behold...!";

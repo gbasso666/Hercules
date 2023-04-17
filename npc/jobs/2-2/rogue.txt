@@ -188,7 +188,7 @@ in_rogue,363,122,4	script	Rogue Guildsman#rg	4_F_ROGUE,{
 					mes "doin' a great job~";
 				}
 				.@jlevel = JobLevel;
-				callfunc "Job_Change",Job_Rogue;
+				callfunc "Job_Change",Job_Stalker;
 				callfunc "F_ClearJobVar";
 				completequest 2027;
 				next;

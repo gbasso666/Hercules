@@ -892,7 +892,7 @@ job_duncer,95,93,4	script	Bijou#da	4W_F_01,{
 		.@jlevel = JobLevel;
 		mes "[Bijou]";
 		completequest 7006;
-		callfunc "Job_Change",Job_Dancer;
+		callfunc "Job_Change",Job_Gypsy;
 		callfunc "F_ClearJobVar";
 		mes "Ooh...!";
 		mes "You look great";

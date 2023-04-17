@@ -524,7 +524,7 @@ prt_church,16,41,4	script	High Bishop#prst	1_M_PASTOR,{
 		next;
 		.@joblvl = JobLevel;
 		completequest 8016;
-		callfunc "Job_Change",Job_Priest;
+		callfunc "Job_Change",Job_High_Priest;
 		callfunc "F_ClearJobVar";		// clears all job variables for the current player
 		mes "[Bishop Paul]";
 		mes "Now you are born again as a Priest. I congratulate you, and hope you will greatly help other people for the rest of your life.";
